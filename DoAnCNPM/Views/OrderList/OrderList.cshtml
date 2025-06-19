@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Order List Table View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .logo-container img {
+                height: 100px;
+            }
+
+        .search-bar {
+            display: grid;
+            grid-template-columns: 80px 300px 80px 50px 80px 50px;
+            border: 1px solid black;
+        }
+
+            .search-bar input {
+                border: none;
+                padding: 5px;
+                border-left: 1px solid black;
+                grid-column: span 1;
+            }
+
+            .search-bar button {
+                border-left: 1px solid black;
+              
+                border: none;
+                cursor: pointer;
+                padding: 5px;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #e0e0e0;
+        }
+
+        .status-inprogress {
+            background-color: orange;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .status-completed {
+            background-color: green;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .payment-pending {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .payment-paid {
+            color: green;
+            font-weight: bold;
+        }
+        .logo-container span {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+        .sort-btn {
+            background-color: #4285f4; /* Màu xanh dương */
+            color: white;
+            border: 1px solid #4285f4;
+        }
+
+        .add-btn {
+            background-color: green;
+            color: white;
+            border: 1px solid green;
+        }
+        .plus-btn {
+            background-color: green;
+            color: white;
+            border: 1px solid green;
+        }
+        .arrow-btn{
+             background-color: #4285f4; /* Màu xanh dương */
+             color: white;
+             border: 1px solid #4285f4;
+        }
+        .search-bar div {
+            background-color: grey;
+            color: white;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img src="~/Content/img/logoQuanAn.jpg" alt="Logo" class="logo-img">
+            <span>Order List</span>
+        </div>
+        <div class="search-bar">
+            <div style="padding: 5px;">Search</div>
+            <input type="text" />
+            <button class="sort-btn">Sort</button>
+            <button class="arrow-btn">v</button>
+            <button class="add-btn">Add</button>
+            <button class="plus-btn">+</button>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>QUANTITIES</th>
+                <th>AMOUNT</th>
+                <th>PAYMENT</th>
+                <th>STATUS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>A1111</td><td>Fri, Sep 27, 2025</td><td>9</td><td>155.000,00 ₫</td><td class="payment-pending">Pending</td><td><span class="status-inprogress">In progress</span></td></tr>
+            <tr><td>A1875</td><td>Fri, Sep 27, 2025</td><td>9</td><td>155.000,00 ₫</td><td class="payment-pending">Pending</td><td><span class="status-inprogress">In progress</span></td></tr>
+            <tr><td>A1811</td><td>Fri, Sep 27, 2025</td><td>9</td><td>155.000,00 ₫</td><td class="payment-paid">Paid</td><td><span class="status-completed">Completed</span></td></tr>
+            <tr><td>A1134</td><td>Fri, Sep 27, 2025</td><td>9</td><td>155.000,00 ₫</td><td class="payment-pending">Pending</td><td><span class="status-inprogress">In progress</span></td></tr>
+            <tr><td>A1164</td><td>Fri, Sep 27, 2025</td><td>9</td><td>155.000,00 ₫</td><td class="payment-paid">Paid</td><td><span class="status-completed">Completed</span></td></tr>
+            <tr><td>A1123</td><td>Fri, Sep 27, 2025</td><td>9</td><td>155.000,00 ₫</td><td class="payment-pending">Pending</td><td><span class="status-inprogress">In progress</span></td></tr>
+            <tr><td>A1159</td><td>Fri, Sep 27, 2025</td><td>9</td><td>155.000,00 ₫</td><td class="payment-pending">Pending</td><td><span class="status-inprogress">In progress</span></td></tr>
+            <tr><td>A1753</td><td>Fri, Sep 27, 2025</td><td>9</td><td>155.000,00 ₫</td><td class="payment-paid">Paid</td><td><span class="status-completed">Completed</span></td></tr>
+        </tbody>
+    </table>
+</body>
+</html>

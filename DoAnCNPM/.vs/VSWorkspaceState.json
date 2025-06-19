@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\QuanAn",
+    "\\QuanAn\\Content",
+    "\\QuanAn\\Content\\css",
+    "\\QuanAn\\Controllers",
+    "\\QuanAn\\Models",
+    "\\QuanAn\\Models\\ViewModel",
+    "\\QuanAn\\Views",
+    "\\QuanAn\\Views\\Home",
+    "\\QuanAn\\Views\\Login"
+  ],
+  "SelectedNode": "\\QuanAn\\Views\\Home\\Index.cshtml",
+  "PreviewInSolutionExplorer": false
+}

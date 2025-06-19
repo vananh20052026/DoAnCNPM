@@ -1,0 +1,71 @@
+﻿@model QuanAn.Models.ViewModel.MenuProductVM
+<link href="~/Content/css/sanPham.css" rel="stylesheet" />
+<script>
+    function catebuttonfilter(catename) {
+        const selectedSection = document.getElementById(catename);
+        if (selectedSection) {
+            document.querySelectorAll('.products-list').forEach(function (section) {
+                section.style.display = 'none';
+            });
+            selectedSection.style.display = 'block';
+        }
+        if (catename == 'all') {
+            document.querySelectorAll('.products-list').forEach(function (section) {
+                section.style.display = 'block';
+            });
+        }
+    }
+</script>
+<div class="item-parent">
+    @{
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-secondary" onclick="catebuttonfilter('all')">Tất Cả</button>
+            @{
+                int categoryCount = 0;
+                foreach (var category in Model.categories)
+                {
+                    if (true)
+                    {
+                        categoryCount++;
+                        <button type="button" class="btn btn-secondary" onclick="catebuttonfilter('@category.CateName')">@category.CateName</button>
+                    }
+                }
+            }
+        </div>
+
+        categoryCount = 0;
+        foreach (var category in Model.categories)
+        {
+            if (true)
+            {
+                categoryCount++;
+                <section id="@category.CateName" class="container-fluid products-list">
+                    @{
+                        int counting = 0;
+                        foreach (var food in Model.itemFoods)
+                        {
+                            if (int.Parse(food.CateID) == categoryCount && counting < 6)
+                            {
+                                <div class="card" style="width: 18rem; display:inline-block;">
+                                    <img src="@food.FoodImage" class="card-img-top"/>
+                                    <div class="card-body">
+                                        <h5 class="card-title">@food.FoodName</h5>
+                                        <p class="card-text">@food.UnitPrice</p>
+                                        <a href="#" class="btn btn-primary">Thêm Vào Order</a>
+                                    </div>
+                                </div>
+                                counting++;
+                            }
+                        }
+                        <div class="item-container more">
+                            <a href="/Menu/FoodList?categoryCount=@categoryCount&categoryName=@category.CateName"><h5>Xem Thêm</h5></a>
+                        </div>
+                    }
+                </section>
+            }
+        }
+    }
+</div>
+
+
+
