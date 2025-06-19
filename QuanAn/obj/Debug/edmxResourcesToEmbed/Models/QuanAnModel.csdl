@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QLQuanAnModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="C_Bill_">
+    <Key>
+      <PropertyRef Name="BillID" />
+    </Key>
+    <Property Name="BillID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TotalFinal" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Payment" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="UserID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="C_Bill_Detail_" Relationship="Self.FK_Bill_Detail_Bill" FromRole="C_Bill_" ToRole="C_Bill_Detail_" />
+    <NavigationProperty Name="C_Order_" Relationship="Self.FK_Bill_Order" FromRole="C_Bill_" ToRole="C_Order_" />
+    <NavigationProperty Name="C_User_" Relationship="Self.FK_Bill_User" FromRole="C_Bill_" ToRole="C_User_" />
+  </EntityType>
+  <EntityType Name="C_Bill_Detail_">
+    <Key>
+      <PropertyRef Name="BillID" />
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="BillID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
+    <NavigationProperty Name="C_Bill_" Relationship="Self.FK_Bill_Detail_Bill" FromRole="C_Bill_Detail_" ToRole="C_Bill_" />
+    <NavigationProperty Name="C_Order_" Relationship="Self.FK_Bill_Detail_Order" FromRole="C_Bill_Detail_" ToRole="C_Order_" />
+  </EntityType>
+  <EntityType Name="C_Category_">
+    <Key>
+      <PropertyRef Name="CateID" />
+    </Key>
+    <Property Name="CateID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="CateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="C_Food_Info_" Relationship="Self.FK_Food_Info_Category" FromRole="C_Category_" ToRole="C_Food_Info_" />
+  </EntityType>
+  <EntityType Name="C_Food_Info_">
+    <Key>
+      <PropertyRef Name="FoodID" />
+    </Key>
+    <Property Name="FoodID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="FoodName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="CateID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="C_Category_" Relationship="Self.FK_Food_Info_Category" FromRole="C_Food_Info_" ToRole="C_Category_" />
+    <NavigationProperty Name="C_Order_Detail_" Relationship="Self.FK_Order_Detail_Food_Info" FromRole="C_Food_Info_" ToRole="C_Order_Detail_" />
+    <NavigationProperty Name="C_Recipe_" Relationship="Self.FK_Recipe_Food_Info" FromRole="C_Food_Info_" ToRole="C_Recipe_" />
+  </EntityType>
+  <EntityType Name="C_Ingredient_">
+    <Key>
+      <PropertyRef Name="IngreID" />
+    </Key>
+    <Property Name="IngreID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="IngreName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Stock" Type="Int64" />
+    <Property Name="UnitMeasurement" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="C_Recipe_Detail_" Relationship="Self.FK_Recipe_Detail_Ingredient" FromRole="C_Ingredient_" ToRole="C_Recipe_Detail_" />
+  </EntityType>
+  <EntityType Name="C_Order_">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Note" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="TableID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="ReservationID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="UserID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="C_Bill_" Relationship="Self.FK_Bill_Order" FromRole="C_Order_" ToRole="C_Bill_" />
+    <NavigationProperty Name="C_Bill_Detail_" Relationship="Self.FK_Bill_Detail_Order" FromRole="C_Order_" ToRole="C_Bill_Detail_" />
+    <NavigationProperty Name="C_Order_Detail_" Relationship="Self.FK_Order_Detail_Order" FromRole="C_Order_" ToRole="C_Order_Detail_" />
+    <NavigationProperty Name="C_Table_" Relationship="Self.FK_Order_Table" FromRole="C_Order_" ToRole="C_Table_" />
+    <NavigationProperty Name="C_User_" Relationship="Self.FK_Order_User" FromRole="C_Order_" ToRole="C_User_" />
+  </EntityType>
+  <EntityType Name="C_Order_Detail_">
+    <Key>
+      <PropertyRef Name="FoodID" />
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="FoodID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Int32" />
+    <NavigationProperty Name="C_Food_Info_" Relationship="Self.FK_Order_Detail_Food_Info" FromRole="C_Order_Detail_" ToRole="C_Food_Info_" />
+    <NavigationProperty Name="C_Order_" Relationship="Self.FK_Order_Detail_Order" FromRole="C_Order_Detail_" ToRole="C_Order_" />
+  </EntityType>
+  <EntityType Name="C_Recipe_">
+    <Key>
+      <PropertyRef Name="RecipeID" />
+    </Key>
+    <Property Name="RecipeID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="RecipeDescription" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="FoodID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="C_Food_Info_" Relationship="Self.FK_Recipe_Food_Info" FromRole="C_Recipe_" ToRole="C_Food_Info_" />
+    <NavigationProperty Name="C_Recipe_Detail_" Relationship="Self.FK_Recipe_Detail_Recipe_Detail" FromRole="C_Recipe_" ToRole="C_Recipe_Detail_" />
+  </EntityType>
+  <EntityType Name="C_Recipe_Detail_">
+    <Key>
+      <PropertyRef Name="RecipeID" />
+      <PropertyRef Name="IngreID" />
+    </Key>
+    <Property Name="RecipeID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="IngreID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="UnitMeasurement" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Int64" />
+    <NavigationProperty Name="C_Ingredient_" Relationship="Self.FK_Recipe_Detail_Ingredient" FromRole="C_Recipe_Detail_" ToRole="C_Ingredient_" />
+    <NavigationProperty Name="C_Recipe_" Relationship="Self.FK_Recipe_Detail_Recipe_Detail" FromRole="C_Recipe_Detail_" ToRole="C_Recipe_" />
+  </EntityType>
+  <EntityType Name="C_Table_">
+    <Key>
+      <PropertyRef Name="TableID" />
+    </Key>
+    <Property Name="TableID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="TableName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="NumOfSeats" Type="Int32" />
+    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="C_Order_" Relationship="Self.FK_Order_Table" FromRole="C_Table_" ToRole="C_Order_" />
+  </EntityType>
+  <EntityType Name="C_User_">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Role" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+    <Property Name="Right" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+    <Property Name="FullName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="Int64" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="C_Bill_" Relationship="Self.FK_Bill_User" FromRole="C_User_" ToRole="C_Bill_" />
+    <NavigationProperty Name="C_Order_" Relationship="Self.FK_Order_User" FromRole="C_User_" ToRole="C_Order_" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Bill_Detail_Bill">
+    <End Role="C_Bill_" Type="Self.C_Bill_" Multiplicity="1" />
+    <End Role="C_Bill_Detail_" Type="Self.C_Bill_Detail_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Bill_">
+        <PropertyRef Name="BillID" />
+      </Principal>
+      <Dependent Role="C_Bill_Detail_">
+        <PropertyRef Name="BillID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Bill_Order">
+    <End Role="C_Order_" Type="Self.C_Order_" Multiplicity="0..1" />
+    <End Role="C_Bill_" Type="Self.C_Bill_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Order_">
+        <PropertyRef Name="OrderID" />
+      </Principal>
+      <Dependent Role="C_Bill_">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Bill_User">
+    <End Role="C_User_" Type="Self.C_User_" Multiplicity="0..1" />
+    <End Role="C_Bill_" Type="Self.C_Bill_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_User_">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="C_Bill_">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Bill_Detail_Order">
+    <End Role="C_Order_" Type="Self.C_Order_" Multiplicity="1" />
+    <End Role="C_Bill_Detail_" Type="Self.C_Bill_Detail_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Order_">
+        <PropertyRef Name="OrderID" />
+      </Principal>
+      <Dependent Role="C_Bill_Detail_">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Food_Info_Category">
+    <End Role="C_Category_" Type="Self.C_Category_" Multiplicity="0..1" />
+    <End Role="C_Food_Info_" Type="Self.C_Food_Info_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Category_">
+        <PropertyRef Name="CateID" />
+      </Principal>
+      <Dependent Role="C_Food_Info_">
+        <PropertyRef Name="CateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Detail_Food_Info">
+    <End Role="C_Food_Info_" Type="Self.C_Food_Info_" Multiplicity="1" />
+    <End Role="C_Order_Detail_" Type="Self.C_Order_Detail_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Food_Info_">
+        <PropertyRef Name="FoodID" />
+      </Principal>
+      <Dependent Role="C_Order_Detail_">
+        <PropertyRef Name="FoodID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Recipe_Food_Info">
+    <End Role="C_Food_Info_" Type="Self.C_Food_Info_" Multiplicity="0..1" />
+    <End Role="C_Recipe_" Type="Self.C_Recipe_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Food_Info_">
+        <PropertyRef Name="FoodID" />
+      </Principal>
+      <Dependent Role="C_Recipe_">
+        <PropertyRef Name="FoodID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Recipe_Detail_Ingredient">
+    <End Role="C_Ingredient_" Type="Self.C_Ingredient_" Multiplicity="1" />
+    <End Role="C_Recipe_Detail_" Type="Self.C_Recipe_Detail_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Ingredient_">
+        <PropertyRef Name="IngreID" />
+      </Principal>
+      <Dependent Role="C_Recipe_Detail_">
+        <PropertyRef Name="IngreID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Detail_Order">
+    <End Role="C_Order_" Type="Self.C_Order_" Multiplicity="1" />
+    <End Role="C_Order_Detail_" Type="Self.C_Order_Detail_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Order_">
+        <PropertyRef Name="OrderID" />
+      </Principal>
+      <Dependent Role="C_Order_Detail_">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Table">
+    <End Role="C_Table_" Type="Self.C_Table_" Multiplicity="0..1" />
+    <End Role="C_Order_" Type="Self.C_Order_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Table_">
+        <PropertyRef Name="TableID" />
+      </Principal>
+      <Dependent Role="C_Order_">
+        <PropertyRef Name="TableID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_User">
+    <End Role="C_User_" Type="Self.C_User_" Multiplicity="0..1" />
+    <End Role="C_Order_" Type="Self.C_Order_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_User_">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="C_Order_">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Recipe_Detail_Recipe_Detail">
+    <End Role="C_Recipe_" Type="Self.C_Recipe_" Multiplicity="1" />
+    <End Role="C_Recipe_Detail_" Type="Self.C_Recipe_Detail_" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C_Recipe_">
+        <PropertyRef Name="RecipeID" />
+      </Principal>
+      <Dependent Role="C_Recipe_Detail_">
+        <PropertyRef Name="RecipeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QLQuanAnEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="C_Bill_" EntityType="Self.C_Bill_" />
+    <EntitySet Name="C_Bill_Detail_" EntityType="Self.C_Bill_Detail_" />
+    <EntitySet Name="C_Category_" EntityType="Self.C_Category_" />
+    <EntitySet Name="C_Food_Info_" EntityType="Self.C_Food_Info_" />
+    <EntitySet Name="C_Ingredient_" EntityType="Self.C_Ingredient_" />
+    <EntitySet Name="C_Order_" EntityType="Self.C_Order_" />
+    <EntitySet Name="C_Order_Detail_" EntityType="Self.C_Order_Detail_" />
+    <EntitySet Name="C_Recipe_" EntityType="Self.C_Recipe_" />
+    <EntitySet Name="C_Recipe_Detail_" EntityType="Self.C_Recipe_Detail_" />
+    <EntitySet Name="C_Table_" EntityType="Self.C_Table_" />
+    <EntitySet Name="C_User_" EntityType="Self.C_User_" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK_Bill_Detail_Bill" Association="Self.FK_Bill_Detail_Bill">
+      <End Role="C_Bill_" EntitySet="C_Bill_" />
+      <End Role="C_Bill_Detail_" EntitySet="C_Bill_Detail_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Bill_Order" Association="Self.FK_Bill_Order">
+      <End Role="C_Order_" EntitySet="C_Order_" />
+      <End Role="C_Bill_" EntitySet="C_Bill_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Bill_User" Association="Self.FK_Bill_User">
+      <End Role="C_User_" EntitySet="C_User_" />
+      <End Role="C_Bill_" EntitySet="C_Bill_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Bill_Detail_Order" Association="Self.FK_Bill_Detail_Order">
+      <End Role="C_Order_" EntitySet="C_Order_" />
+      <End Role="C_Bill_Detail_" EntitySet="C_Bill_Detail_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Food_Info_Category" Association="Self.FK_Food_Info_Category">
+      <End Role="C_Category_" EntitySet="C_Category_" />
+      <End Role="C_Food_Info_" EntitySet="C_Food_Info_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Detail_Food_Info" Association="Self.FK_Order_Detail_Food_Info">
+      <End Role="C_Food_Info_" EntitySet="C_Food_Info_" />
+      <End Role="C_Order_Detail_" EntitySet="C_Order_Detail_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Recipe_Food_Info" Association="Self.FK_Recipe_Food_Info">
+      <End Role="C_Food_Info_" EntitySet="C_Food_Info_" />
+      <End Role="C_Recipe_" EntitySet="C_Recipe_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Recipe_Detail_Ingredient" Association="Self.FK_Recipe_Detail_Ingredient">
+      <End Role="C_Ingredient_" EntitySet="C_Ingredient_" />
+      <End Role="C_Recipe_Detail_" EntitySet="C_Recipe_Detail_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Detail_Order" Association="Self.FK_Order_Detail_Order">
+      <End Role="C_Order_" EntitySet="C_Order_" />
+      <End Role="C_Order_Detail_" EntitySet="C_Order_Detail_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Table" Association="Self.FK_Order_Table">
+      <End Role="C_Table_" EntitySet="C_Table_" />
+      <End Role="C_Order_" EntitySet="C_Order_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_User" Association="Self.FK_Order_User">
+      <End Role="C_User_" EntitySet="C_User_" />
+      <End Role="C_Order_" EntitySet="C_Order_" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Recipe_Detail_Recipe_Detail" Association="Self.FK_Recipe_Detail_Recipe_Detail">
+      <End Role="C_Recipe_" EntitySet="C_Recipe_" />
+      <End Role="C_Recipe_Detail_" EntitySet="C_Recipe_Detail_" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

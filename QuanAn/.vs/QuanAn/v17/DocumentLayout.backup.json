@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|c:\\users\\admin\\desktop\\school\\cnpm\\quanan - login - menu(tam tam di)\\quanan\\quanan\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Controllers\\HomeController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:QuanAn\\Controllers\\HomeController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|c:\\users\\admin\\desktop\\school\\cnpm\\quanan - login - menu(tam tam di)\\quanan\\quanan\\content\\css\\sanpham.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\content\\css\\sanpham.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|c:\\users\\admin\\desktop\\school\\cnpm\\quanan - login - menu(tam tam di)\\quanan\\quanan\\views\\menu\\menu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\views\\menu\\menu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|c:\\users\\admin\\desktop\\school\\cnpm\\quanan - login - menu(tam tam di)\\quanan\\quanan\\content\\css\\menu.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\content\\css\\menu.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|c:\\users\\admin\\desktop\\school\\cnpm\\quanan - login - menu(tam tam di)\\quanan\\quanan\\views\\menu\\foodlistpv.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\views\\menu\\foodlistpv.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Views\\Login\\Login.cshtml",
+              "RelativeDocumentMoniker": "QuanAn\\Views\\Login\\Login.cshtml",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Views\\Login\\Login.cshtml",
+              "RelativeToolTip": "QuanAn\\Views\\Login\\Login.cshtml",
+              "ViewState": "AgIAADMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-19T18:03:44.819Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "sanPham.css",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Content\\css\\sanPham.css",
+              "RelativeDocumentMoniker": "QuanAn\\Content\\css\\sanPham.css",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Content\\css\\sanPham.css",
+              "RelativeToolTip": "QuanAn\\Content\\css\\sanPham.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-06-19T17:15:38.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Menu.css",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Content\\css\\Menu.css",
+              "RelativeDocumentMoniker": "QuanAn\\Content\\css\\Menu.css",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Content\\css\\Menu.css",
+              "RelativeToolTip": "QuanAn\\Content\\css\\Menu.css",
+              "ViewState": "AgIAABAAAAAAAAAAAAAswGEAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-06-19T17:15:37.243Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Menu.cshtml",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Views\\Menu\\Menu.cshtml",
+              "RelativeDocumentMoniker": "QuanAn\\Views\\Menu\\Menu.cshtml",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Views\\Menu\\Menu.cshtml",
+              "RelativeToolTip": "QuanAn\\Views\\Menu\\Menu.cshtml",
+              "ViewState": "AgIAANsAAAAAAAAAAAAAANoAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-19T15:53:28.758Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FoodListPV.cshtml",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Views\\Menu\\FoodListPV.cshtml",
+              "RelativeDocumentMoniker": "QuanAn\\Views\\Menu\\FoodListPV.cshtml",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Views\\Menu\\FoodListPV.cshtml",
+              "RelativeToolTip": "QuanAn\\Views\\Menu\\FoodListPV.cshtml",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAADEAAABTAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-19T16:01:43.179Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "QuanAn\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\School\\CNPM\\QuanAn - login - menu(tam tam di)\\QuanAn\\QuanAn\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "QuanAn\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-19T15:49:36.357Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

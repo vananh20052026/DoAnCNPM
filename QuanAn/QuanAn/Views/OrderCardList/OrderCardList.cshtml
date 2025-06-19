@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Quản lý đơn hàng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        .search-bar {
+            display: grid;
+            grid-template-columns: 80px 300px 80px 50px 80px 50px;
+            border: 1px solid black;
+        }
+
+            .search-bar input {
+                border: none;
+                padding: 5px;
+                border-left: 1px solid black;
+                grid-column: span 1;
+            }
+
+            .search-bar button {
+                border-left: 1px solid black;
+              
+                border: none;
+                cursor: pointer;
+                padding: 5px;
+            }
+
+        .orders {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .order {
+            border: 1px solid #ccc;
+            padding: 15px;
+            width: 400px;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .status-inprogress {
+            background-color: orange;
+            color: white;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+
+        .status-completed {
+            background-color: green;
+            color: white;
+            padding: 2px 5px;
+            font-size: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+            table th,
+            table td {
+                text-align: left;
+                border-bottom: 1px dashed #aaa;
+                padding: 4px 2px;
+                white-space: nowrap;
+            }
+
+        .total {
+            margin-top: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .merge-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .pay-btn {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            table-layout: fixed; /* giúp chia cột đều */
+        }
+
+            table th,
+            table td {
+                text-align: left;
+                border-bottom: 1px dashed #aaa;
+                padding: 4px 2px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+                table th:nth-child(1),
+                table td:nth-child(1) {
+                    width: 50%; /* Tên món */
+                }
+
+                table th:nth-child(2),
+                table td:nth-child(2) {
+                    width: 25%; /* Số lượng */
+                    text-align: center;
+                }
+
+                table th:nth-child(3),
+                table td:nth-child(3) {
+                    width: 25%; /* Giá */
+                    text-align: right;
+                }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 24px;
+            gap: 10px;
+        }
+
+        .logo-img {
+            height: 100px; /* hoặc 50px tùy độ lớn logo bạn muốn */
+            width: auto;
+        }
+
+        .sort-btn {
+            background-color: #4285f4; /* Màu xanh dương */
+            color: white;
+            border: 1px solid #4285f4;
+        }
+
+        .add-btn {
+            background-color: green;
+            color: white;
+            border: 1px solid green;
+        }
+        .plus-btn {
+            background-color: green;
+            color: white;
+            border: 1px solid green;
+        }
+
+        .arrow-btn {
+            background-color: #4285f4; /* Màu xanh dương */
+            color: white;
+            border: 1px solid #4285f4;
+        }
+              .search-bar div {
+          background-color: grey;
+          color: white;
+              }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="~/Content/img/logoQuanAn.jpg" alt="Logo" class="logo-img">
+            <span>Order Card List</span>
+        </div>
+        <div class="search-bar">
+            <div style="padding: 5px;">Search</div>
+            <input type="text" />
+            <button class="sort-btn">Sort</button>
+            <button class="arrow-btn">v</button>
+            <button class="add-btn">Add</button>
+            <button class="plus-btn">+</button>
+        </div>
+    </div>
+
+    <div class="orders">
+        <!-- Đơn hàng 1 -->
+        <div class="order">
+            <div class="order-header">
+                <div>
+                    <div><strong>A1</strong></div>
+                    <div>A1111</div>
+                </div>
+                <div class="status-inprogress">In Progress</div>
+            </div>
+            <div>Fri, Sep 27, 2025<br>15:00pm</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Items</th>
+                        <th>Quantities</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Cơm chiên dương châu</td><td>1</td><td>50.000,00 ₫</td></tr>
+                    <tr><td>Trứng chiên hành</td><td>1</td><td>10.000,00 ₫</td></tr>
+                    <tr><td>Bò xào hành tây</td><td>1</td><td>30.000,00 ₫</td></tr>
+                    <tr><td>Nước cam</td><td>2</td><td>30.000,00 ₫</td></tr>
+                    <tr><td>Nước suối</td><td>3</td><td>15.000,00 ₫</td></tr>
+                    <tr><td>Canh chua hải sản</td><td>1</td><td>20.000,00 ₫</td></tr>
+                </tbody>
+            </table>
+            <div class="total">
+                <div>TOTAL: 9</div>
+                <div>155.000,00 đ</div>
+            </div>
+            <div class="buttons">
+                <button class="merge-btn">MERGE BILL</button>
+                <button class="pay-btn">PAY BILL</button>
+            </div>
+        </div>
+
+        <!-- Đơn hàng 2 -->
+        <div class="order">
+            <div class="order-header">
+                <div>
+                    <div><strong>A2</strong></div>
+                    <div>A1122</div>
+                </div>
+                <div class="status-completed">Completed</div>
+            </div>
+            <div>Fri, Sep 27, 2025<br>15:00pm</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Items</th>
+                        <th>Quantities</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Cơm chiên dương châu</td><td>1</td><td>50.000,00 ₫</td></tr>
+                    <tr><td>Trứng chiên hành</td><td>1</td><td>10.000,00 ₫</td></tr>
+                    <tr><td>Bò xào hành tây</td><td>1</td><td>30.000,00 ₫</td></tr>
+                    <tr><td>Nước cam</td><td>2</td><td>30.000,00 ₫</td></tr>
+                    <tr><td>Nước suối</td><td>3</td><td>15.000,00 ₫</td></tr>
+                    <tr><td>Canh chua hải sản</td><td>1</td><td>20.000,00 ₫</td></tr>
+                </tbody>
+            </table>
+            <div class="total">
+                <div>TOTAL: 9</div>
+                <div>155.000,00 đ</div>
+            </div>
+            <div class="buttons">
+                <button class="merge-btn">MERGE BILL</button>
+                <button class="pay-btn">PAY BILL</button>
+            </div>
+        </div>
+
+        <!-- Đơn hàng 3 -->
+        <div class="order">
+            <div class="order-header">
+                <div>
+                    <div><strong>A13</strong></div>
+                    <div>A1313</div>
+                </div>
+                <div class="status-inprogress">In Progress</div>
+            </div>
+            <div>Fri, Sep 27, 2025<br>15:00pm</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Items</th>
+                        <th>Quantities</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Cơm chiên dương châu</td><td>1</td><td>50.000,00 ₫</td></tr>
+                    <tr><td>Trứng chiên hành</td><td>1</td><td>10.000,00 ₫</td></tr>
+                    <tr><td>Bò xào hành tây</td><td>1</td><td>30.000,00 ₫</td></tr>
+                    <tr><td>Nước cam</td><td>2</td><td>30.000,00 ₫</td></tr>
+                    <tr><td>Nước suối</td><td>3</td><td>15.000,00 ₫</td></tr>
+                    <tr><td>Canh chua hải sản</td><td>1</td><td>20.000,00 ₫</td></tr>
+                </tbody>
+            </table>
+            <div class="total">
+                <div>TOTAL: 9</div>
+                <div>155.000,00 đ</div>
+            </div>
+            <div class="buttons">
+                <button class="merge-btn">MERGE BILL</button>
+                <button class="pay-btn">PAY BILL</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

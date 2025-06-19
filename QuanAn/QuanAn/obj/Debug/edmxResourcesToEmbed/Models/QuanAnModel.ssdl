@@ -1,0 +1,336 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QLQuanAnModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="[Bill]">
+    <Key>
+      <PropertyRef Name="BillID" />
+    </Key>
+    <Property Name="BillID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="TotalFinal" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Payment" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedTime" Type="datetime" />
+    <Property Name="Status" Type="nvarchar" MaxLength="20" />
+    <Property Name="OrderID" Type="char" MaxLength="10" />
+    <Property Name="UserID" Type="char" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="[Bill_Detail]">
+    <Key>
+      <PropertyRef Name="BillID" />
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="BillID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="OrderID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="[Category]">
+    <Key>
+      <PropertyRef Name="CateID" />
+    </Key>
+    <Property Name="CateID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="CateName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="[Food_Info]">
+    <Key>
+      <PropertyRef Name="FoodID" />
+    </Key>
+    <Property Name="FoodID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="FoodName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="FoodImage" Type="varchar(max)" />
+    <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Description" Type="nvarchar" MaxLength="300" />
+    <Property Name="CateID" Type="char" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="[Ingredient]">
+    <Key>
+      <PropertyRef Name="IngreID" />
+    </Key>
+    <Property Name="IngreID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="IngreName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Stock" Type="bigint" />
+    <Property Name="UnitMeasurement" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="[Order]">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="CreatedTime" Type="datetime" />
+    <Property Name="Status" Type="nvarchar" MaxLength="20" />
+    <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Note" Type="nvarchar" MaxLength="200" />
+    <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="TableID" Type="char" MaxLength="10" />
+    <Property Name="ReservationID" Type="char" MaxLength="10" />
+    <Property Name="UserID" Type="char" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="[Order_Detail]">
+    <Key>
+      <PropertyRef Name="FoodID" />
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="FoodID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="OrderID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Status" Type="nvarchar" MaxLength="20" />
+    <Property Name="Quantity" Type="int" />
+  </EntityType>
+  <EntityType Name="[Recipe]">
+    <Key>
+      <PropertyRef Name="RecipeID" />
+    </Key>
+    <Property Name="RecipeID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="RecipeDescription" Type="nvarchar" MaxLength="200" />
+    <Property Name="FoodID" Type="char" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="[Recipe_Detail]">
+    <Key>
+      <PropertyRef Name="RecipeID" />
+      <PropertyRef Name="IngreID" />
+    </Key>
+    <Property Name="RecipeID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="IngreID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="UnitMeasurement" Type="nvarchar" MaxLength="20" />
+    <Property Name="Quantity" Type="bigint" />
+  </EntityType>
+  <EntityType Name="[Table]">
+    <Key>
+      <PropertyRef Name="TableID" />
+    </Key>
+    <Property Name="TableID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="TableName" Type="nvarchar" MaxLength="20" />
+    <Property Name="NumOfSeats" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="[User]">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Role" Type="nvarchar" MaxLength="25" />
+    <Property Name="Right" Type="nvarchar" MaxLength="25" />
+    <Property Name="FullName" Type="nvarchar" MaxLength="250" />
+    <Property Name="Phone" Type="int" />
+    <Property Name="Email" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_Bill_Detail_Bill">
+    <End Role="[Bill]" Type="Self.[Bill]" Multiplicity="1" />
+    <End Role="[Bill_Detail]" Type="Self.[Bill_Detail]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[Bill]">
+        <PropertyRef Name="BillID" />
+      </Principal>
+      <Dependent Role="[Bill_Detail]">
+        <PropertyRef Name="BillID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Bill_Detail_Order">
+    <End Role="[Order]" Type="Self.[Order]" Multiplicity="1" />
+    <End Role="[Bill_Detail]" Type="Self.[Bill_Detail]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[Order]">
+        <PropertyRef Name="OrderID" />
+      </Principal>
+      <Dependent Role="[Bill_Detail]">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Bill_Order">
+    <End Role="[Order]" Type="Self.[Order]" Multiplicity="0..1" />
+    <End Role="[Bill]" Type="Self.[Bill]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[Order]">
+        <PropertyRef Name="OrderID" />
+      </Principal>
+      <Dependent Role="[Bill]">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Bill_User">
+    <End Role="[User]" Type="Self.[User]" Multiplicity="0..1" />
+    <End Role="[Bill]" Type="Self.[Bill]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[User]">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="[Bill]">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Food_Info_Category">
+    <End Role="[Category]" Type="Self.[Category]" Multiplicity="0..1" />
+    <End Role="[Food_Info]" Type="Self.[Food_Info]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[Category]">
+        <PropertyRef Name="CateID" />
+      </Principal>
+      <Dependent Role="[Food_Info]">
+        <PropertyRef Name="CateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Detail_Food_Info">
+    <End Role="[Food_Info]" Type="Self.[Food_Info]" Multiplicity="1" />
+    <End Role="[Order_Detail]" Type="Self.[Order_Detail]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[Food_Info]">
+        <PropertyRef Name="FoodID" />
+      </Principal>
+      <Dependent Role="[Order_Detail]">
+        <PropertyRef Name="FoodID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Detail_Order">
+    <End Role="[Order]" Type="Self.[Order]" Multiplicity="1" />
+    <End Role="[Order_Detail]" Type="Self.[Order_Detail]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[Order]">
+        <PropertyRef Name="OrderID" />
+      </Principal>
+      <Dependent Role="[Order_Detail]">
+        <PropertyRef Name="OrderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Table">
+    <End Role="[Table]" Type="Self.[Table]" Multiplicity="0..1" />
+    <End Role="[Order]" Type="Self.[Order]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[Table]">
+        <PropertyRef Name="TableID" />
+      </Principal>
+      <Dependent Role="[Order]">
+        <PropertyRef Name="TableID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_User">
+    <End Role="[User]" Type="Self.[User]" Multiplicity="0..1" />
+    <End Role="[Order]" Type="Self.[Order]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[User]">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="[Order]">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Recipe_Detail_Ingredient">
+    <End Role="[Ingredient]" Type="Self.[Ingredient]" Multiplicity="1" />
+    <End Role="[Recipe_Detail]" Type="Self.[Recipe_Detail]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[Ingredient]">
+        <PropertyRef Name="IngreID" />
+      </Principal>
+      <Dependent Role="[Recipe_Detail]">
+        <PropertyRef Name="IngreID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Recipe_Detail_Recipe_Detail">
+    <End Role="[Recipe]" Type="Self.[Recipe]" Multiplicity="1" />
+    <End Role="[Recipe_Detail]" Type="Self.[Recipe_Detail]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[Recipe]">
+        <PropertyRef Name="RecipeID" />
+      </Principal>
+      <Dependent Role="[Recipe_Detail]">
+        <PropertyRef Name="RecipeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Recipe_Food_Info">
+    <End Role="[Food_Info]" Type="Self.[Food_Info]" Multiplicity="0..1" />
+    <End Role="[Recipe]" Type="Self.[Recipe]" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="[Food_Info]">
+        <PropertyRef Name="FoodID" />
+      </Principal>
+      <Dependent Role="[Recipe]">
+        <PropertyRef Name="FoodID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QLQuanAnModelStoreContainer">
+    <EntitySet Name="[Bill]" EntityType="Self.[Bill]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="[Bill_Detail]" EntityType="Self.[Bill_Detail]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="[Category]" EntityType="Self.[Category]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="[Food_Info]" EntityType="Self.[Food_Info]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="[Ingredient]" EntityType="Self.[Ingredient]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="[Order]" EntityType="Self.[Order]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="[Order_Detail]" EntityType="Self.[Order_Detail]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="[Recipe]" EntityType="Self.[Recipe]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="[Recipe_Detail]" EntityType="Self.[Recipe_Detail]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="[Table]" EntityType="Self.[Table]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="[User]" EntityType="Self.[User]" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Bill_Detail_Bill" Association="Self.FK_Bill_Detail_Bill">
+      <End Role="[Bill]" EntitySet="[Bill]" />
+      <End Role="[Bill_Detail]" EntitySet="[Bill_Detail]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Bill_Detail_Order" Association="Self.FK_Bill_Detail_Order">
+      <End Role="[Order]" EntitySet="[Order]" />
+      <End Role="[Bill_Detail]" EntitySet="[Bill_Detail]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Bill_Order" Association="Self.FK_Bill_Order">
+      <End Role="[Order]" EntitySet="[Order]" />
+      <End Role="[Bill]" EntitySet="[Bill]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Bill_User" Association="Self.FK_Bill_User">
+      <End Role="[User]" EntitySet="[User]" />
+      <End Role="[Bill]" EntitySet="[Bill]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Food_Info_Category" Association="Self.FK_Food_Info_Category">
+      <End Role="[Category]" EntitySet="[Category]" />
+      <End Role="[Food_Info]" EntitySet="[Food_Info]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Detail_Food_Info" Association="Self.FK_Order_Detail_Food_Info">
+      <End Role="[Food_Info]" EntitySet="[Food_Info]" />
+      <End Role="[Order_Detail]" EntitySet="[Order_Detail]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Detail_Order" Association="Self.FK_Order_Detail_Order">
+      <End Role="[Order]" EntitySet="[Order]" />
+      <End Role="[Order_Detail]" EntitySet="[Order_Detail]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Table" Association="Self.FK_Order_Table">
+      <End Role="[Table]" EntitySet="[Table]" />
+      <End Role="[Order]" EntitySet="[Order]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_User" Association="Self.FK_Order_User">
+      <End Role="[User]" EntitySet="[User]" />
+      <End Role="[Order]" EntitySet="[Order]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Recipe_Detail_Ingredient" Association="Self.FK_Recipe_Detail_Ingredient">
+      <End Role="[Ingredient]" EntitySet="[Ingredient]" />
+      <End Role="[Recipe_Detail]" EntitySet="[Recipe_Detail]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Recipe_Detail_Recipe_Detail" Association="Self.FK_Recipe_Detail_Recipe_Detail">
+      <End Role="[Recipe]" EntitySet="[Recipe]" />
+      <End Role="[Recipe_Detail]" EntitySet="[Recipe_Detail]" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Recipe_Food_Info" Association="Self.FK_Recipe_Food_Info">
+      <End Role="[Food_Info]" EntitySet="[Food_Info]" />
+      <End Role="[Recipe]" EntitySet="[Recipe]" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

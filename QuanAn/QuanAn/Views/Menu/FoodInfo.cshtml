@@ -1,0 +1,118 @@
+﻿@model QuanAn.Models.ViewModel.FoodInfoVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    @@media screen and (min-width:1840px) {
+        .pro-container {
+            width: 1729px !important;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
+    @@media screen and (max-width:1839px) {
+        .pro-container {
+            width: 1053px !important;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
+    .pro-container {
+        max-width: 1912px;
+        background-color: #e1e1e4;
+    }
+
+    .pro-section img {
+        max-width: 500px;
+    }
+
+    .pro-info {
+        max-width: 76%;
+        display: inline-block;
+    }
+
+    .pro-section .pro-buy {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .pro-info-header div {
+        display: inline-block;
+        vertical-align: top;
+        width: 50%;
+    }
+
+    .pro-section {
+        background-color: white;
+        border: solid black 0.5px;
+        border-radius: 50px;
+        padding: 50px;
+        margin: 10px
+    }
+
+        .pro-section.pro-buy {
+            max-width: 20%;
+            display: inline-block;
+            vertical-align: top;
+            position: sticky;
+            top: 10px;
+        }
+
+        .pro-section.pro-more {
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+    .container-fluid.feature-products {
+        display: inline-block;
+    }
+</style>
+<div class="pro-container">
+    <div class="pro-info">
+        <div class="pro-section pro-info-header">
+            <img src="@Model.food_Info.FoodImage" />
+            <div>
+                <h4><strong>@Html.DisplayFor(model => model.food_Info.FoodName)</strong></h4>
+                <p class="pro-sale">Đã bán &nbsp; @Model.food_Info.C_Order_Detail_.Count</p>
+                <p>Phân Loại: &nbsp; @Model.food_Info.C_Category_.CateName</p>
+                <p>@Model.estimatedValue.ToString()</p>
+                <hr />
+                <h5><strong>Mô tả</strong></h5>
+                <p>@Model.food_Info.Description</p>
+            </div>
+        </div>
+        @*<div class="pro-section pro-more">
+            @Html.Partial("RelatedProductPV", Model)
+        </div>
+        <div class="pro-section pro-more">
+            @Html.Partial("TopProductPV", Model)
+        </div>*@
+    </div>
+    <div class="pro-section pro-buy">
+        <div class="form-group">
+            @*Phàn tạm tính*@
+            @using (Html.BeginForm("FoodInfo", "Menu", FormMethod.Get))
+            {
+                <h4><strong>Số lượng</strong></h4>
+                <p>
+                    @Html.TextBoxFor(model => model.quantity, new
+            { @class = "form-control", @type = "number", @min = 1 })
+                </p>
+
+                <h4><strong>Tạm tính</strong></h4>
+                <p>@Model.estimatedValue.ToString()</p>
+
+                <p>
+                    @Html.ActionLink("Thêm vào giỏ hàng", "AddToCart", "Cart"
+                        , new { id = Model.product.ProductID, quantity = Model.quantity }
+                        , new { @class = "btn btn-info" })
+                </p>
+            }
+        </div>
+    </div>
+</div>
