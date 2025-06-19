@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7f7226cae72049388adba863f774bb41" Name="Diagram1">
+        <EntityTypeShape EntityType="QLQuanAnModel.C_Bill_" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.C_Bill_Detail_" Width="1.5" PointX="8.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.C_Category_" Width="1.5" PointX="3.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.C_Food_Info_" Width="1.5" PointX="6" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.C_Ingredient_" Width="1.5" PointX="8.25" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.C_Order_" Width="1.5" PointX="6" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.C_Order_Detail_" Width="1.5" PointX="8.25" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.C_Recipe_" Width="1.5" PointX="8.25" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.C_Recipe_Detail_" Width="1.5" PointX="10.5" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.C_Table_" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.C_User_" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLQuanAnModel.sysdiagram" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Bill_Detail_Bill" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Bill_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Bill_User" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Bill_Detail_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Food_Info_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Order_Detail_Food_Info" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Recipe_Food_Info" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Recipe_Detail_Ingredient" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Order_Detail_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Order_Table" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Order_User" ManuallyRouted="false" />
+        <AssociationConnector Association="QLQuanAnModel.FK_Recipe_Detail_Recipe_Detail" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
