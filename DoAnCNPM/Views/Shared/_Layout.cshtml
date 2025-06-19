@@ -7,33 +7,67 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
+
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
         <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Quán Ăn Mợ Bầu", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Menu", "Menu", "Menu", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("OrderList", "OrderList", "OrderList", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("OrderCardList", "OrderCardList", "OrderCardList", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Report", "Report", "Report", new { area = "" }, new { @class = "nav-link" })</li>
                 </ul>
+            </div>
+
+            <section class="dangnhap">
+                <a href="~/Account/Register">Đăng Ký</a>
+            </section>
+            <div class="btn-group" role="group">
+                @{
+                    if (HttpContext.Current.Session["Username"] != null)
+                    {
+                        <button type="button" class="Profile  btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            @{
+                                var username = HttpContext.Current.Session["Username"].ToString();
+                                var role = HttpContext.Current.Session["UserRole"].ToString();
+                                if (role == "QL")
+                                {
+
+                                    <img src="~/Content/img/user-admin.png" />
+                                    <p>@username</p>
+                                }
+                                else
+                                {
+                                    <img src="~/Content/img/user.png" />
+                                    <p>@username</p>
+                                }
+                            }
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/Login/ProfileInfo">Thông Tin Tài Khoản</a>
+                            <a class="dropdown-item" href="@Url.Action("Logout", "Login", null)">Logout</a>
+                        </div>
+                    }
+                }
             </div>
         </div>
     </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+       
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
+
+
 </html>

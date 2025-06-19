@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DoAnCNPM.Models
+namespace QuanAn.Models
 {
     using System;
     using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace DoAnCNPM.Models
         public string Role { get; set; }
         public string Right { get; set; }
         public string FullName { get; set; }
-        public Nullable<int> Phone { get; set; }
+        public Nullable<long> Phone { get; set; }
         public string Email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

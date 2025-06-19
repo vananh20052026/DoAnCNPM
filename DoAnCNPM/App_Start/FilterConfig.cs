@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace DoAnCNPM
+namespace QuanAn
 {
     public class FilterConfig
     {

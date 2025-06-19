@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DoAnCNPM.Models
+namespace QuanAn.Models
 {
     using System;
     using System.Collections.Generic;
@@ -23,7 +23,6 @@ namespace DoAnCNPM.Models
     
         public string FoodID { get; set; }
         public string FoodName { get; set; }
-        public string FoodImage { get; set; }
         public Nullable<decimal> UnitPrice { get; set; }
         public string Description { get; set; }
         public string CateID { get; set; }

@@ -43,7 +43,6 @@
           </Key>
           <Property Name="FoodID" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="FoodName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="FoodImage" Type="varchar(max)" />
           <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" />
           <Property Name="CateID" Type="char" MaxLength="10" />
@@ -115,12 +114,12 @@
           </Key>
           <Property Name="UserID" Type="char" MaxLength="10" Nullable="false" />
           <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Passowrd" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Role" Type="nvarchar" MaxLength="25" />
           <Property Name="Right" Type="nvarchar" MaxLength="25" />
           <Property Name="FullName" Type="nvarchar" MaxLength="250" />
-          <Property Name="Phone" Type="int" />
-          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="Phone" Type="bigint" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -387,7 +386,6 @@
           </Key>
           <Property Name="FoodID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="FoodName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FoodImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="CateID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
@@ -479,12 +477,12 @@
           <Property Name="Role" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="Right" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="FullName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="Int32" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="Int64" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="C_Bill_" Relationship="Self.FK_Bill_User" FromRole="C_User_" ToRole="C_Bill_" />
           <NavigationProperty Name="C_Order_" Relationship="Self.FK_Order_User" FromRole="C_User_" ToRole="C_Order_" />
         </EntityType>
-        <EntityType Name="sysdiagram">
+        <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
@@ -650,7 +648,7 @@
           <EntitySet Name="C_Recipe_Detail_" EntityType="Self.C_Recipe_Detail_" />
           <EntitySet Name="C_Table_" EntityType="Self.C_Table_" />
           <EntitySet Name="C_User_" EntityType="Self.C_User_" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <AssociationSet Name="FK_Bill_Detail_Bill" Association="Self.FK_Bill_Detail_Bill">
             <End Role="C_Bill_" EntitySet="C_Bill_" />
             <End Role="C_Bill_Detail_" EntitySet="C_Bill_Detail_" />
@@ -745,7 +743,6 @@
               <MappingFragment StoreEntitySet="[Food_Info]">
                 <ScalarProperty Name="FoodID" ColumnName="FoodID" />
                 <ScalarProperty Name="FoodName" ColumnName="FoodName" />
-                <ScalarProperty Name="FoodImage" ColumnName="FoodImage" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="CateID" ColumnName="CateID" />
@@ -822,7 +819,7 @@
               <MappingFragment StoreEntitySet="[User]">
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Password" ColumnName="Passowrd" />
                 <ScalarProperty Name="Role" ColumnName="Role" />
                 <ScalarProperty Name="Right" ColumnName="Right" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
@@ -832,7 +829,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="QLQuanAnModel.sysdiagram">
+            <EntityTypeMapping TypeName="QLQuanAnModel.sysdiagrams">
               <MappingFragment StoreEntitySet="sysdiagrams">
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
@@ -856,7 +853,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

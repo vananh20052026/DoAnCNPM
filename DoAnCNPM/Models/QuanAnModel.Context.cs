@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DoAnCNPM.Models
+namespace QuanAn.Models
 {
     using System;
     using System.Data.Entity;
@@ -36,6 +36,6 @@ namespace DoAnCNPM.Models
         public virtual DbSet<C_Recipe_Detail_> C_Recipe_Detail_ { get; set; }
         public virtual DbSet<C_Table_> C_Table_ { get; set; }
         public virtual DbSet<C_User_> C_User_ { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
     }
 }

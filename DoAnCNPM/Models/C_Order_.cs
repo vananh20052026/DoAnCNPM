@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DoAnCNPM.Models
+namespace QuanAn.Models
 {
     using System;
     using System.Collections.Generic;
