@@ -1,0 +1,54 @@
+﻿@model QuanAn.Models.ViewModel.MenuProductVM
+<link href="~/Content/css/sanPham.css" rel="stylesheet" />
+<div class="item-parent">
+    @{
+        int categoryCount = 0;
+        foreach (var category in Model.categories)
+        {
+            if (true)
+            {
+                categoryCount++;
+                <div class="item-header">
+                    <img src="~/Content/img/HomeImg/shoe.png" />
+                    <h2>@category.CateName</h2>
+                </div>
+                <section class="container-fluid products-list">
+                    @{
+                        int counting = 0;
+                        foreach (var food in Model.itemFoods)
+                        {
+                            if (int.Parse(food.CateID) == categoryCount && counting < 6)
+                            {
+                                counting++;
+                                <div class="item-container">
+                                    <a href="@Url.Action("ProductDetail", "Home", new { id = food.FoodID })">
+                                        <img class="item-img" src="@food.FoodImage" />
+                                        <div class="card-body">
+                                            <p class="prodPrice text-truncate">
+                                                @food.UnitPrice
+                                            </p>
+
+                                            <p class="prodName text-truncate">
+                                                @food.FoodName
+                                            </p>
+
+                                            <p class="prodSale text-truncate">
+                                                Đã bán: &nbsp; @food.C_Order_Detail_.Count
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        }
+                        <div class="item-container more">
+                            <a href="/Menu/FoodList?categoryCount=@categoryCount&categoryName=@category.CateName"><h5>Xem Thêm</h5></a>
+                        </div>
+                    }
+                </section>
+            }
+        }
+    }
+</div>
+
+
+

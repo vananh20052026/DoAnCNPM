@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reports Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f8f8f8;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px;
+        }
+
+            .filter-bar select,
+            .filter-bar input[type="text"] {
+                padding: 6px;
+                font-size: 14px;
+            }
+
+        .btn-submit {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            margin: 0 20px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        .report-table {
+            margin: 20px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            color: #4caf50;
+        }
+
+        .amount-column {
+            color: #0a57d1;
+            font-weight: bold;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .logo-container img {
+                height: 100px;
+            }
+        .logo-container span {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="~/Content/img/logoQuanAn.jpg" alt="Logo" class="logo-img">
+        <span>Report</span>
+    </div>
+
+    <div class="filter-bar">
+        <label for="year"><b>Year</b></label>
+        <input type="text" id="year" value="2025" />
+        <button class="btn-submit">SUBMIT</button>
+    </div>
+
+    <div class="chart-container">
+        <h3>Total Paid Order</h3>
+        <img src="~/Content/img/bieudo.png" alt="Chart" style="width: 60%; height: auto;" />
+    </div>
+
+    <div class="report-table">
+        <h4>Total Paid Order - Reports Data</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Month - Year</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>2023-01</td><td class="amount-column">20</td></tr>
+                <tr><td>2023-02</td><td class="amount-column">60</td></tr>
+                <tr><td>2023-03</td><td class="amount-column">10</td></tr>
+                <tr><td>2023-04</td><td class="amount-column">2</td></tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,275 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|d:\\study\\tldh\\nam 2 - hk3\\cnpm\\project\\quanan\\quanan\\quanan\\views\\menu\\foodlistpv.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\views\\menu\\foodlistpv.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\quanan\\views\\menu\\menu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\views\\menu\\menu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|d:\\study\\tldh\\nam 2 - hk3\\cnpm\\project\\quanan\\quanan\\quanan\\models\\viewmodel\\menuproductvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\models\\viewmodel\\menuproductvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|d:\\study\\tldh\\nam 2 - hk3\\cnpm\\project\\quanan\\quanan\\quanan\\controllers\\menucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\controllers\\menucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|d:\\study\\tldh\\nam 2 - hk3\\cnpm\\project\\quanan\\quanan\\quanan\\views\\menu\\foodlist.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\views\\menu\\foodlist.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|d:\\study\\tldh\\nam 2 - hk3\\cnpm\\project\\quanan\\quanan\\quanan\\views\\menu\\foodinfo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\views\\menu\\foodinfo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|d:\\study\\tldh\\nam 2 - hk3\\cnpm\\project\\quanan\\quanan\\quanan\\content\\css\\menu.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\content\\css\\menu.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\quanan\\models\\viewmodel\\profileinfovm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\models\\viewmodel\\profileinfovm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|d:\\study\\tldh\\nam 2 - hk3\\cnpm\\project\\quanan\\quanan\\quanan\\models\\viewmodel\\foodinfovm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\models\\viewmodel\\foodinfovm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\quanan\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\quanan\\models\\viewmodel\\loginvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\models\\viewmodel\\loginvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|d:\\study\\tldh\\nam 2 - hk3\\cnpm\\project\\quanan\\quanan\\quanan\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\quanan\\models\\c_user_.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\models\\c_user_.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\quanan\\controllers\\reportcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\controllers\\reportcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\quanan\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2F297F7E-642B-4671-A248-D9A93C841461}|QuanAn\\QuanAn.csproj|solutionrelative:quanan\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Menu.css",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Content\\css\\Menu.css",
+              "RelativeDocumentMoniker": "QuanAn\\Content\\css\\Menu.css",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Content\\css\\Menu.css",
+              "RelativeToolTip": "QuanAn\\Content\\css\\Menu.css",
+              "ViewState": "AgIAAI4AAAAAAAAAAAAgwK8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-06-19T05:00:06.681Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FoodInfo.cshtml",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Menu\\FoodInfo.cshtml",
+              "RelativeDocumentMoniker": "QuanAn\\Views\\Menu\\FoodInfo.cshtml",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Menu\\FoodInfo.cshtml",
+              "RelativeToolTip": "QuanAn\\Views\\Menu\\FoodInfo.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-19T04:44:44.175Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FoodList.cshtml",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Menu\\FoodList.cshtml",
+              "RelativeDocumentMoniker": "QuanAn\\Views\\Menu\\FoodList.cshtml",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Menu\\FoodList.cshtml",
+              "RelativeToolTip": "QuanAn\\Views\\Menu\\FoodList.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-19T04:35:38.588Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MenuController.cs",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Controllers\\MenuController.cs",
+              "RelativeDocumentMoniker": "QuanAn\\Controllers\\MenuController.cs",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Controllers\\MenuController.cs",
+              "RelativeToolTip": "QuanAn\\Controllers\\MenuController.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAA5wGwAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-19T04:13:46.278Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "FoodInfoVM.cs",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Models\\ViewModel\\FoodInfoVM.cs",
+              "RelativeDocumentMoniker": "QuanAn\\Models\\ViewModel\\FoodInfoVM.cs",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Models\\ViewModel\\FoodInfoVM.cs",
+              "RelativeToolTip": "QuanAn\\Models\\ViewModel\\FoodInfoVM.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAswAoAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-19T03:52:30.734Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MenuProductVM.cs",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Models\\ViewModel\\MenuProductVM.cs",
+              "RelativeDocumentMoniker": "QuanAn\\Models\\ViewModel\\MenuProductVM.cs",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Models\\ViewModel\\MenuProductVM.cs",
+              "RelativeToolTip": "QuanAn\\Models\\ViewModel\\MenuProductVM.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAYwBMAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-19T03:47:56.734Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FoodListPV.cshtml",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Menu\\FoodListPV.cshtml",
+              "RelativeDocumentMoniker": "QuanAn\\Views\\Menu\\FoodListPV.cshtml",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Menu\\FoodListPV.cshtml",
+              "RelativeToolTip": "QuanAn\\Views\\Menu\\FoodListPV.cshtml",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAAC4AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-19T03:47:02.767Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Menu.cshtml",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Menu\\Menu.cshtml",
+              "RelativeDocumentMoniker": "QuanAn\\Views\\Menu\\Menu.cshtml",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Menu\\Menu.cshtml",
+              "RelativeToolTip": "QuanAn\\Views\\Menu\\Menu.cshtml",
+              "ViewState": "AgIAANsAAAAAAAAAAAAAAOgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-18T06:34:10.763Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ProfileInfoVM.cs",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Models\\ViewModel\\ProfileInfoVM.cs",
+              "RelativeDocumentMoniker": "QuanAn\\Models\\ViewModel\\ProfileInfoVM.cs",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Models\\ViewModel\\ProfileInfoVM.cs",
+              "RelativeToolTip": "QuanAn\\Models\\ViewModel\\ProfileInfoVM.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABcAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-18T06:38:44.022Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "LoginVM.cs",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Models\\ViewModel\\LoginVM.cs",
+              "RelativeDocumentMoniker": "QuanAn\\Models\\ViewModel\\LoginVM.cs",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Models\\ViewModel\\LoginVM.cs",
+              "RelativeToolTip": "QuanAn\\Models\\ViewModel\\LoginVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-18T06:20:15.595Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "QuanAn\\Controllers\\LoginController.cs",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "QuanAn\\Controllers\\LoginController.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAADgv1QAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-18T05:37:54.616Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Login\\Login.cshtml",
+              "RelativeDocumentMoniker": "QuanAn\\Views\\Login\\Login.cshtml",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Login\\Login.cshtml",
+              "RelativeToolTip": "QuanAn\\Views\\Login\\Login.cshtml",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAGMAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-18T06:30:04.893Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ReportController.cs",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Controllers\\ReportController.cs",
+              "RelativeDocumentMoniker": "QuanAn\\Controllers\\ReportController.cs",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Controllers\\ReportController.cs",
+              "RelativeToolTip": "QuanAn\\Controllers\\ReportController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-19T03:10:37.806Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "C_User_.cs",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Models\\C_User_.cs",
+              "RelativeDocumentMoniker": "QuanAn\\Models\\C_User_.cs",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Models\\C_User_.cs",
+              "RelativeToolTip": "QuanAn\\Models\\C_User_.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-19T03:14:47.375Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "QuanAn\\Views\\Home\\Index.cshtml",
+              "ToolTip": "D:\\Study\\TLDH\\Nam 2 - HK3\\CNPM\\Project\\QuanAn\\QuanAn\\QuanAn\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "QuanAn\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-19T02:59:07.255Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
