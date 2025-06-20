@@ -1,0 +1,363 @@
+﻿@model QuanAn.Models.ViewModel.MenuProductVM
+
+<!DOCTYPE html>
+<html lang="en">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<meta name="viewport" content="initial-scale=0.1">
+
+<link href="~/Content/css/Menu.css" rel="stylesheet" />
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .logo-container img {
+                height: 100px;
+            }
+
+        .search-bar {
+            display: grid;
+            grid-template-columns: 80px 300px 80px 50px 80px 50px;
+            border: 1px solid black;
+        }
+
+            .search-bar input {
+                border: none;
+                padding: 5px;
+                border-left: 1px solid black;
+                grid-column: span 1;
+            }
+
+            .search-bar button {
+                border-left: 1px solid black;
+                border: none;
+                cursor: pointer;
+                padding: 5px;
+            }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-card {
+            display: flex;
+            flex-direction: column;
+            width: 350px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            min-height: 500px; /* đảm bảo đủ cao để ADD ORDER nằm dưới */
+            box-sizing: border-box;
+            background-color: white;
+        }
+
+        .item-header img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .menu-title {
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .menu-sub {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .menu-price {
+            color: green;
+            font-weight: bold;
+        }
+
+        .menu-desc {
+            margin-top: 8px;
+            font-size: 0.9em;
+        }
+
+        .quantity-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+
+
+            .quantity-controls input {
+                width: 30px;
+                text-align: center;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+        .add-order-btn {
+            margin-top: auto;
+            height: 35px;
+            background-color: #6fbf4b;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .logo-container span {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .sort-btn {
+            background-color: #4285f4; /* Màu xanh dương */
+            color: white;
+            border: 1px solid #4285f4;
+        }
+
+        .add-btn {
+            background-color: green;
+            color: white;
+            border: 1px solid green;
+        }
+
+        .plus-btn {
+            background-color: green;
+            color: white;
+            border: 1px solid green;
+        }
+
+        .arrow-btn {
+            background-color: #4285f4; /* Màu xanh dương */
+            color: white;
+            border: 1px solid #4285f4;
+        }
+
+        .search-bar div {
+            background-color: grey;
+            color: white;
+        }
+
+        .ingredient-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0;
+            font-size: 14px;
+        }
+
+        .order-content {
+            flex-grow: 1;
+        }
+
+        .item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 10px;
+        }
+
+
+
+        .item-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .divider {
+            border-top: 1px solid #ccc;
+            margin: 10px 0;
+        }
+
+        .btnplus {
+            background-color: #6fbf4b;
+            padding: 5px 10px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btnSubtract {
+            background-color: #888;
+            padding: 5px 10px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img src="~/Content/img/logoQuanAn.jpg" alt="Logo" class="logo-img">
+            <span>Menu</span>
+        </div>
+        <div class="search-bar">
+            <div style="padding: 5px;">Search</div>
+            <input type="text" />
+            <button class="sort-btn">Sort</button>
+            <button class="arrow-btn">v</button>
+            <button class="add-btn">Add</button>
+            <button class="plus-btn">+</button>
+        </div>
+    </div>
+
+    <div class="menu-grid">
+        <section class="home-container">
+            <div id="carouselbanner" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                </div>
+                <a class="carousel-control-prev" href="#carouselbanner" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselbanner" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            <section class="search-content">
+                @using (Html.BeginForm("Menu","Menu", FormMethod.Get))
+                {
+                    @Html.TextBoxFor(m => m.SearchTerm, new
+               {
+                   @class = "search-input",
+                   placeholder = "Nhập tên, mô tả hoặc loại sản phẩm"
+                    })
+                    <button type="submit" class="search-button">Tìm kiếm</button>
+                }
+            </section>
+            <div class="side-menu">
+                <h4 style="margin: 0;">Danh Mục</h4>
+                @{
+                    int categoryCount = 0;
+                    foreach (var category in Model.categories)
+                    {
+                        categoryCount++;
+                        <div class="item-header" style="background-color: transparent !important;">
+                            <div class="sidemenu-item-container more">
+                                <a href="/Home/ProductList?categoryCount=@categoryCount&categoryName=@category.CateName">
+                                    <h5>@category.CateName</h5>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="container-list-right">
+                @Html.Partial("FoodListPV", Model)
+            </div>
+                <!-- Card 1 -->
+                <!--<div class="menu-card">
+                <div class="item-header">
+                    <img src="~/Content/img/comchienduongchau.jpg" />
+                    <div class="item-info">
+                        <div class="menu-title">Cơm chiên dương châu</div>
+                        <div class="menu-sub">Main courses</div>
+                        <div class="menu-price">50.000,00 ₫</div>
+                    </div>
+                </div>
+                <div class="divider"></div>-->
+                <!-- ĐƯỜNG GẠCH NGANG NGĂN CÁCH -->
+                <!--<div class="ingredients">
+                    <div class="ingredient-row"><span>Cơm trắng</span><span>300g</span></div>
+                    <div class="ingredient-row"><span>Thịt xá xíu</span><span>150g</span></div>
+                    <div class="ingredient-row"><span>Tôm tươi</span><span>100g</span></div>
+                    <div class="ingredient-row"><span>Lạp xưởng</span><span>100g</span></div>
+                    <div class="ingredient-row"><span>Trứng gà</span><span>2 quả</span></div>
+                    <div class="ingredient-row"><span>Đậu Hà Lan</span><span>100g</span></div>
+                    <div class="ingredient-row"><span>Cà rốt</span><span>1 củ</span></div>
+                    <div class="ingredient-row"><span>Gia vị</span><span></span></div>
+                </div>
+                <div class="quantity-controls">
+                    <button class="btnSubtract">-</button>
+                    <input type="text" value="1" />
+                    <button class="btnplus">+</button>
+                </div>
+                <button class="add-order-btn">ADD ORDER</button>
+            </div>-->
+                <!-- Card 2 -->
+                <!--<div class="menu-card">
+                <div class="item-header">
+                    <img src="~/Content/img/nuoccam.jpg" />
+                    <div class="item-info">
+                        <div class="menu-title">Nước cam</div>
+                        <div class="menu-sub">Drinks</div>
+                        <div class="menu-price">20.000,00 ₫</div>
+                    </div>
+                </div>
+                <div class="divider"></div>-->
+                <!-- ĐƯỜNG GẠCH NGANG NGĂN CÁCH -->
+                <!--<div class="ingredients">
+                    <div class="ingredient-row"><span>Cam tươi</span><span>300g</span></div>
+                    <div class="ingredient-row"><span>Đá viên</span><span></span></div>
+                </div>
+                <div class="quantity-controls">
+                    <button class="btnSubtract">-</button>
+                    <input type="text" value="1" />
+                    <button class="btnplus">+</button>
+                </div>
+                <button class="add-order-btn">ADD ORDER</button>
+            </div>-->
+                <!-- Card 3 -->
+                <!--<div class="menu-card">
+                <div class="item-header">
+                    <img src="~/Content/img/boxaohanhtay.jpg" />
+                    <div class="item-info">
+                        <div class="menu-title">Bò xào hành tây</div>
+                        <div class="menu-sub">Main courses</div>
+                        <div class="menu-price">75.000,00 ₫</div>
+                    </div>
+                </div>
+                <div class="divider"></div>-->
+                <!-- ĐƯỜNG GẠCH NGANG NGĂN CÁCH -->
+                <!--<div class="ingredients">
+                    <div class="ingredient-row"><span>Thịt bò mềm</span><span>300g</span></div>
+                    <div class="ingredient-row"><span>Hành tây trắng</span><span>100g</span></div>
+                    <div class="ingredient-row"><span>Rau mùi</span><span></span></div>
+                    <div class="ingredient-row"><span>Tỏi</span><span></span></div>
+                    <div class="ingredient-row"><span>Hành lá</span><span></span></div>
+                    <div class="ingredient-row"><span>Gia vị</span><span></span></div>
+                </div>
+                <div class="quantity-controls">
+                    <button class="btnSubtract">-</button>
+                    <input type="text" value="1" />
+                    <button class ="btnplus">+</button>
+                </div>
+
+                <button class="add-order-btn">ADD ORDER</button>
+
+            </div>-->
+
+            </div>
+</body>
+</html>
