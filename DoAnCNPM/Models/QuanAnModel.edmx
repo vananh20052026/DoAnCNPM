@@ -15,7 +15,6 @@
           <Property Name="TotalFinal" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Payment" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedTime" Type="datetime" />
-          <Property Name="Status" Type="nvarchar" MaxLength="20" />
           <Property Name="OrderID" Type="char" MaxLength="10" />
           <Property Name="UserID" Type="char" MaxLength="10" />
         </EntityType>
@@ -353,7 +352,6 @@
           <Property Name="TotalFinal" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Payment" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedTime" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="OrderID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
           <Property Name="UserID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="C_Bill_Detail_" Relationship="Self.FK_Bill_Detail_Bill" FromRole="C_Bill_" ToRole="C_Bill_Detail_" />
@@ -715,7 +713,6 @@
                 <ScalarProperty Name="TotalFinal" ColumnName="TotalFinal" />
                 <ScalarProperty Name="Payment" ColumnName="Payment" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
               </MappingFragment>

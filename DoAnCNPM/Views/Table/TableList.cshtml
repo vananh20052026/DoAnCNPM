@@ -1,0 +1,461 @@
+﻿@model QuanAn.Models.ViewModel.TableVM
+
+@{
+    ViewBag.Title = "Danh sách bàn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Font Awesome cho biểu tượng nếu muốn dùng -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .main-content {
+        background: url('https://yentutunglam.com.vn/wp-content/uploads/2024/03/Com-que15994-scaled.jpg') no-repeat center center fixed;
+        background-size: cover;
+        background-attachment: fixed;
+        padding: 30px;
+    }
+
+    .container {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card {
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+        height: 100%;
+    }
+
+    
+        .card-body .btn {
+            width: 100%;
+            margin-top: 8px;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 10px 0;
+        }
+
+    .btn-select-table {
+        background-color: #343a40;
+        color: white;
+    }
+
+        .btn-select-table:hover:not(:disabled) {
+            background-color: #495057;
+        }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border: none;
+        color: #212529;
+    }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            color: #fff;
+        }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+    .table-status {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.95rem;
+        padding: 8px 16px;
+        border-radius: 30px;
+        display: inline-block;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .status-available {
+        background-color: #d4edda;
+    }
+
+    .status-occupied {
+        background-color: #f8d7da;
+    }
+
+    .status-confirmed {
+        background-color: #fff3cd;
+    }
+
+    .status-booked {
+        background-color: #d1ecf1;
+    }
+
+    .status-other {
+        background-color: #e2e3e5;
+    }
+
+    .status-text-available {
+        color: #155724;
+    }
+
+    .status-text-occupied {
+        color: #721c24;
+    }
+
+    .status-text-confirmed {
+        color: #856404;
+    }
+
+    .status-text-booked {
+        color: #0c5460;
+    }
+
+    .status-text-other {
+        color: #383d41;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .badge-danger {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .btn-select-table {
+        margin-top: auto;
+        background-color: #343a40;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-select-table:hover:not(:disabled) {
+            background-color: #495057;
+        }
+
+        .btn-select-table:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+    .card-body img.img-fluid {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+    .card-title {
+        color: #0056b3; /* Màu xanh dương đậm */
+        font-weight: bold;
+        font-size: 1.25rem;
+        margin-bottom: 0.5em;
+    }
+</style>
+
+<div class="container mt-4">
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span>&times;</span>
+            </button>
+        </div>
+    }
+    @if (TempData["AddTableError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["AddTableError"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Đóng">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span>&times;</span>
+            </button>
+        </div>
+    }
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <h2 class="mb-3">📋 Danh sách bàn</h2>
+       <input type="text" id="searchTableInput" class="form-control w-50" placeholder="🔍 Tìm kiếm bàn..." />
+
+    </div>
+
+    <div class="row">
+        @if (Model != null && Model.TableList != null && Model.TableList.Any())
+        {
+            foreach (var table in Model.TableList)
+            {
+                var cardClass = "";
+                var buttonDisabled = false;
+                var statusTextClass = "";
+
+                // Đảm bảo không bị null
+                var tableId = (table.TableID ?? "").Trim().Replace(" ", "").Replace("-", "").Replace(".", "");
+                var modalId = "editModal_" + tableId;
+                var status = (table.Status ?? "").Trim().ToLower();
+
+                switch (status)
+                {
+                    case "available":
+                        cardClass = "status-available";
+                        statusTextClass = "status-text-available";
+                        break;
+                    case "occupied":
+                        cardClass = "status-occupied";
+                        buttonDisabled = true;
+                        statusTextClass = "status-text-occupied";
+                        break;
+                    case "confirmed":
+                        cardClass = "status-confirmed";
+                        buttonDisabled = true;
+                        statusTextClass = "status-text-confirmed";
+                        break;
+                    case "booked":
+                        cardClass = "status-booked";
+                        buttonDisabled = true;
+                        statusTextClass = "status-text-booked";
+                        break;
+                    default:
+                        cardClass = "status-other";
+                        statusTextClass = "status-text-other";
+                        break;
+                }
+
+                <div class="col-md-3 col-sm-6 mb-4 table-card"
+                     data-name="@table.TableName.ToLower()"
+                     data-status="@table.Status.ToLower()">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title mb-2">@table.TableName</h5>
+                            <img src="https://images.squarespace-cdn.com/content/v1/5e1b73fb6eeb973ee1becfc4/1592675020070-2CPPWG2J34ZWURFKJC6P/custom-restaurant-tables-david-stine%2B4.jpg" class="img-fluid mb-3" alt="Table icon" />
+                            <p class="card-text">👥 Số lượng: <strong>@table.NumOfSeats</strong> người</p>
+                            <span class="table-status @cardClass @statusTextClass">
+                                @table.Status.ToUpper()
+                            </span>
+
+
+                            @using (Html.BeginForm("SelectTable", "Table", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="tableId" value="@tableId" />
+                                <button type="submit" class="btn btn-select-table mt-3" @(buttonDisabled ? "disabled" : "")>
+                                    Chọn bàn này
+                                </button>
+                            }
+
+                            <div class="d-flex justify-content-between mt-2">
+                                <button class="btn btn-warning flex-fill mr-1"
+                                        data-toggle="modal"
+                                        data-target="#editTableModal"
+                                        data-id="@table.TableID.Trim()"
+                                        data-name="@table.TableName"
+                                        data-seats="@table.NumOfSeats">
+                                    ✏️ Sửa
+                                </button>
+                                <button class="btn btn-danger flex-fill ml-1"
+                                        data-toggle="modal"
+                                        data-target="#deleteTableModal"
+                                        data-id="@table.TableID.Trim()"
+                                        data-name="@table.TableName">
+                                    🗑️ Xoá
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-md-3 col-sm-6 mb-4" data-toggle="modal" data-target="#addTableModal">
+                <div class="card h-100 d-flex align-items-center justify-content-center border border-success" style="border-width: 2px;">
+                    <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                        <span style="font-size: 3rem; color: #28a745;">➕</span>
+                        <p class="mt-2 mb-0 font-weight-bold" style="color: #28a745;">Thêm bàn</p>
+                    </div>
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <p>Hiện không có bàn nào để hiển thị.</p>
+            </div>
+        }
+    </div>
+</div>
+<!-- Modal dùng chung cho chỉnh sửa bàn -->
+<div class="modal fade" id="editTableModal" tabindex="-1" role="dialog" aria-labelledby="editTableModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("EditTable", "Table", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTableModalLabel">Sửa thông tin bàn</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    @Html.Hidden("TableID", null, new { id = "modalTableID" })
+                    <div class="form-group">
+                        <label>Tên bàn</label>
+                        <input type="text" class="form-control" name="TableName" id="modalTableName" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Số lượng chỗ ngồi</label>
+                        <input type="number" class="form-control" name="NumOfSeats" id="modalNumOfSeats" required min="1" max="50" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Modal Thêm Bàn -->
+<div class="modal fade" id="addTableModal" tabindex="-1" role="dialog" aria-labelledby="addTableModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("AddTable", "Table", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTableModalLabel">Thêm bàn mới</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tên bàn</label>
+                        <input type="text" class="form-control" name="TableName" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Số lượng chỗ ngồi</label>
+                        <input type="number" class="form-control" name="NumOfSeats" id="addNumOfSeats" required min="1" max="50" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Modal Xoá Bàn -->
+<div class="modal fade" id="deleteTableModal" tabindex="-1" role="dialog" aria-labelledby="deleteTableModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("DeleteTable", "Table", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title">Xác nhận xoá bàn</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="TableID" id="deleteTableId" />
+                    <p>Bạn có chắc muốn xoá bàn <strong id="deleteTableName"></strong> không?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+                    <button type="submit" class="btn btn-danger">Xoá</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function savetableselected(table) {
+        localStorage.setItem("selectedtable", table);
+    }
+    function openEditModal(id, name, seats, status) {
+        $('#modalTableID').val(id);
+        $('#modalTableName').val(name);
+        $('#modalNumOfSeats').val(seats);
+        $('#editTableModal').modal('show');
+    }
+    $('#editTableModal').on('hidden.bs.modal', function () {
+        $('#modalTableID').val('');
+        $('#modalTableName').val('');
+        $('#modalNumOfSeats').val('');
+    });
+     $(document).ready(function () {
+        var addError = '@TempData["AddTableError"]';
+        if (addError === 'true') {
+            $('#addTableModal').modal('show');
+        }
+     });
+    setTimeout(function () {
+        $('.alert').alert('close');
+    }, 5000);
+    $('#editTableModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var tableId = button.data('id');
+        var tableName = button.data('name');
+        var numOfSeats = button.data('seats');
+
+        var modal = $(this);
+        modal.find('#modalTableID').val(tableId);        // ✅ đúng ID input hidden
+        modal.find('#modalTableName').val(tableName);    // ✅ đúng ID input
+        modal.find('#modalNumOfSeats').val(numOfSeats);  // ✅ đúng ID input
+    });
+    $('#deleteTableModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Nút đã click
+        var tableId = button.data('id');
+        var tableName = button.data('name');
+
+        var modal = $(this);
+        modal.find('#deleteTableId').val(tableId);
+        modal.find('#deleteTableName').text(tableName);
+    });
+    $(document).ready(function () {
+        $("#searchTableInput").on("keyup", function () {
+            const keyword = $(this).val().toLowerCase();
+            $(".table-card").each(function () {
+                const name = $(this).data("name");
+                const status = $(this).data("status");
+
+                if (name.includes(keyword) || status.includes(keyword)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>
