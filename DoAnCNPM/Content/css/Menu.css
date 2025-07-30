@@ -1,0 +1,135 @@
+﻿.container-list-right {
+    display: inline-block;
+}
+
+.container-item-header {
+    text-align: left;
+    background-color: lightblue;
+    display: flex;
+    padding: 5px;
+}
+
+    .container-item-header img {
+        max-width: 30px;
+        max-height: 30px;
+        display: inline-block;
+    }
+
+    .container-item-header h4 {
+        display: inline-block;
+        margin: 0px;
+        vertical-align: top;
+    }
+
+    .container-item-header p {
+        display: flex;
+        margin: 0;
+        margin-left: auto;
+    }
+
+.side-menu {
+    display: inline-block;
+    position: sticky;
+    top: 20px;
+    border: solid gray 0.5px;
+    border-radius: 20px;
+    vertical-align: top;
+    margin-top: 20px;
+    background-color: white;
+    margin-right: 20px;
+    padding: 5px;
+}
+
+.side-menu-item {
+    text-align: left;
+    padding: 5px;
+}
+
+    .side-menu-item img {
+        max-width: 70px;
+        display: inline-block;
+        border: hidden;
+        border-radius: 5px;
+    }
+
+    .side-menu-item p {
+        display: inline-block;
+        margin: 0;
+        vertical-align: 60%;
+    }
+
+.banner {
+    width: auto;
+}
+
+    .banner img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+.proList {
+    margin: 2% 5%;
+}
+
+    .proList li {
+        display: inline-block;
+    }
+
+    .proList a img {
+        max-height: 120px
+    }
+
+.col {
+    padding: 0px !important;
+}
+
+.row {
+    margin: 0px !important;
+}
+
+.item {
+    display: inline-block;
+    max-width: 350px;
+    vertical-align: top;
+}
+
+.card-img-top {
+    width: inherit;
+    height: 200px;
+}
+
+.container-item {
+    width: auto;
+    background-color: yellow;
+    text-align: center;
+    padding: 1% 0%;
+    margin-top: 20px;
+}
+
+.containerao {
+    text-align: center;
+    background-color: white;
+    margin-top: 20px;
+}
+
+.containergang {
+    text-align: center;
+    background-color: white;
+    margin-top: 20px;
+}
+
+.htcuahang {
+    text-align: center;
+}
+
+.cuahanglist {
+    list-style: none;
+    background-color: darkblue;
+    text-align: center;
+    color: white;
+}
+
+.cuahang1 {
+    display: inline-block;
+    width: 606px;
+}
