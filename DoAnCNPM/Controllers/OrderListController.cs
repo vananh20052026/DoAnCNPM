@@ -147,5 +147,66 @@ namespace QuanAn.Controllers
             }
             return RedirectToAction("OrderList", new { statusFilter = Request["statusFilter"], tableFilter = Request["tableFilter"], dayFilter = Request["dayFilter"] });
         }
+
+        // POST: OrderList/RemoveOrderItem
+        [HttpPost]
+        public ActionResult RemoveOrderItem(string orderId, string foodId)
+        {
+            var orderDetailToRemove = db.C_Order_Detail_.FirstOrDefault(od => od.OrderID == orderId && od.FoodID == foodId);
+
+            if (orderDetailToRemove != null)
+            {
+                if (orderDetailToRemove.Status == "Chưa làm")
+                {
+                    db.C_Order_Detail_.Remove(orderDetailToRemove);
+                    db.SaveChanges();
+
+                    var masterOrder = db.C_Order_.Include(o => o.C_Order_Detail_).FirstOrDefault(o => o.OrderID == orderId);
+
+                    if (masterOrder != null)
+                    {
+                        if (!masterOrder.C_Order_Detail_.Any())
+                        {
+                            db.C_Order_.Remove(masterOrder);
+                            db.SaveChanges();
+                            TempData["SuccessMessage"] = "Món ăn đã được xóa và đơn hàng rỗng cũng đã được xóa thành công!";
+                        }
+                        else
+                        {
+                            masterOrder.Total = masterOrder.C_Order_Detail_.Sum(od => (decimal?)od.Quantity * (od.UnitPrice ?? 0)) - (masterOrder.Discount ?? 0);
+
+                            if (masterOrder.C_Order_Detail_.Any(od => od.Status == "Đang xử lý"))
+                            {
+                                masterOrder.Status = "Đang xử lý";
+                            }
+                            else if (masterOrder.C_Order_Detail_.All(od => od.Status == "Hoàn tất"))
+                            {
+                                masterOrder.Status = "Hoàn tất";
+                            }
+                            else
+                            {
+                                masterOrder.Status = "Chưa làm";
+                            }
+                            db.SaveChanges();
+                            TempData["SuccessMessage"] = "Món ăn đã được xóa khỏi đơn hàng và thông tin đơn hàng đã được cập nhật!";
+                        }
+                    }
+                    else
+                    {
+                        TempData["SuccessMessage"] = "Món ăn đã được xóa. Không tìm thấy đơn hàng chính để cập nhật.";
+                    }
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Không thể xóa món ăn vì trạng thái không phải **'Chưa làm'**.";
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy món ăn để xóa trong đơn hàng này.";
+            }
+
+            return RedirectToAction("OrderList", new { statusFilter = Request["statusFilter"], tableFilter = Request["tableFilter"], dayFilter = Request["dayFilter"] });
+        }
     }
 }
