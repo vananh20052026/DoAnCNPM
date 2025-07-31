@@ -60,18 +60,80 @@ namespace QuanAn.Controllers
                          .Take(pageSize)
                          .ToList();
 
+            var allBillIDsInRawBills = rawBills.Select(b => b.BillID).ToList();
+            var allBillDetails = db.C_Bill_Detail_
+                                   .Where(bd => allBillIDsInRawBills.Contains(bd.BillID))
+                                   .ToList();
+
+            var allOrderIdsInBillDetails = allBillDetails.Select(bd => bd.OrderID).Distinct().ToList();
+
+            var allOrderDetails = new List<C_Order_Detail_>();
+            if (allOrderIdsInBillDetails.Any())
+            {
+                allOrderDetails = db.C_Order_Detail_
+                                     .Include(od => od.C_Food_Info_)
+                                     .Where(od => allOrderIdsInBillDetails.Contains(od.OrderID))
+                                     .ToList();
+            }
+
             var billListVM = new List<BillListVM>();
+            decimal vatRate = 0.08m;
 
             foreach (var bill in rawBills)
             {
+                decimal totalBeforeDiscount = bill.Total ?? 0;
+                decimal discount = bill.Discount ?? 0;
+                decimal totalFinalAfterDiscount = totalBeforeDiscount - discount;
+
+                decimal vatAmountCalculated = totalFinalAfterDiscount * vatRate;
+                decimal totalFinalWithVATCalculated = totalFinalAfterDiscount + vatAmountCalculated;
+
+                var relatedOrderIds = allBillDetails
+                                         .Where(bd => bd.BillID == bill.BillID)
+                                         .Select(bd => bd.OrderID)
+                                         .Where(id => id != null)
+                                         .Distinct()
+                                         .ToList();
+
+                if (!relatedOrderIds.Any() && !string.IsNullOrEmpty(bill.OrderID))
+                {
+                    relatedOrderIds.Add(bill.OrderID);
+                }
+
+                string relatedOrderIdsFormatted = relatedOrderIds.Any() ?
+                                                  string.Join(", ", relatedOrderIds.OrderBy(id => id)) :
+                                                  "N/A";
+
+                var foodItemsForCurrentBill = allOrderDetails
+                                              .Where(od => relatedOrderIds.Contains(od.OrderID))
+                                              .ToList();
+
+                var currentBillAggregatedItems = foodItemsForCurrentBill
+                    .GroupBy(od => new { od.FoodID, od.C_Food_Info_.FoodName, od.UnitPrice })
+                    .Select(g => new AggregatedFoodItemVM
+                    {
+                        FoodName = g.Key.FoodName,
+                        TotalQuantity = g.Sum(od => od.Quantity ?? 0),
+                        UnitPrice = g.Key.UnitPrice ?? 0,
+                        TotalPrice = g.Sum(od => (od.Quantity ?? 0) * (od.UnitPrice ?? 0))
+                    })
+                    .OrderBy(item => item.FoodName)
+                    .ToList();
+
                 billListVM.Add(new BillListVM
                 {
                     BillID = bill.BillID,
                     CreatedTimeFormatted = (bill.CreatedTime?.ToString("dddd, dd/MM/yyyy") ?? "N/A") + "<br />" + (bill.CreatedTime?.ToString("HH:mm") + " giờ" ?? "N/A"),
                     StaffName = bill.C_User_?.FullName ?? "N/A",
                     Payment = bill.Payment ?? "Chưa thanh toán",
-                    TotalFormatted = (bill.Total ?? 0).ToString("N0") + " đ",
-                    TotalFinalFormatted = (bill.Total ?? 0).ToString("N0") + " đ"
+                    TotalFormatted = totalBeforeDiscount.ToString("N0") + " đ",
+                    DiscountFormatted = (discount > 0 ? "- " + discount.ToString("N0") : "0") + " đ",
+                    TotalFinalFormatted = totalFinalAfterDiscount.ToString("N0") + " đ",
+                    VATAmountFormatted = vatAmountCalculated.ToString("N0") + " đ",
+                    TotalFinalWithVATFormatted = totalFinalWithVATCalculated.ToString("N0") + " đ",
+                    RelatedOrderIDs = relatedOrderIds,
+                    RelatedOrderIDsFormatted = relatedOrderIdsFormatted,
+                    AggregatedFoodItems = currentBillAggregatedItems
                 });
             }
 
