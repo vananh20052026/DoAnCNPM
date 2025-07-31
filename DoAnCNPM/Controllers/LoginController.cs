@@ -78,7 +78,7 @@ namespace QuanAn.Controllers
             return View(model);
         }
 
-        // POST: Account/ProfileInfo - Cập nhật thông tin cơ bản
+        // POST: Account/ProfileInfo - Hoàn chỉnh với đổi mật khẩu
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ProfileInfo(ProfileInfoVM model)
@@ -110,6 +110,39 @@ namespace QuanAn.Controllers
                     }
 
                     user.Email = model.Email;
+
+                    // Đổi mật khẩu nếu có
+                    if (!string.IsNullOrWhiteSpace(model.Password))
+                    {
+                        if (string.IsNullOrWhiteSpace(model.CurrentPassword))
+                        {
+                            ModelState.AddModelError("CurrentPassword", "Vui lòng nhập mật khẩu hiện tại.");
+                            model.Role = user.Role;
+                            return View(model);
+                        }
+
+                        TempData["Debug"] = "CurrentPassword: " + model.CurrentPassword + " | DB Password: " + user.Password;
+
+                        if (model.CurrentPassword != user.Password)
+                        {
+                            ModelState.AddModelError("CurrentPassword", "Mật khẩu hiện tại không đúng.");
+                            model.Role = user.Role;
+                            return View(model);
+                        }
+
+                        if (model.Password != model.ConfirmPassword)
+                        {
+                            ModelState.AddModelError("ConfirmPassword", "Mật khẩu xác nhận không khớp.");
+                            model.Role = user.Role;
+                            return View(model);
+                        }
+
+                        user.Password = model.Password;
+                        db.SaveChanges();
+                        TempData["SuccessMessage"] = "Đổi mật khẩu thành công. Vui lòng đăng nhập lại!";
+                        Session.Clear();
+                        return RedirectToAction("Login", "Login");
+                    }
 
                     db.SaveChanges();
                     TempData["SuccessMessage"] = "Cập nhật thông tin thành công!";
