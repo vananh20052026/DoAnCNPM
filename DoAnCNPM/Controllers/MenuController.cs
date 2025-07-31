@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
+using System.Diagnostics;
 
 namespace QuanAn.Controllers
 {
@@ -13,6 +14,31 @@ namespace QuanAn.Controllers
     public class MenuController : Controller
     {
         private QLQuanAnEntities db = new QLQuanAnEntities();
+
+        private string GenerateNewOrderId()
+        {
+            string newId = "";
+            bool isUnique = false;
+            int maxAttempts = 100;
+            int attempts = 0;
+
+            while (!isUnique && attempts < maxAttempts)
+            {
+                string guidPart = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper();
+                newId = $"HD{guidPart}";
+
+                isUnique = !db.C_Order_.Any(o => o.OrderID.Trim() == newId.Trim());
+
+                attempts++;
+            }
+
+            if (!isUnique)
+            {
+                throw new Exception("Không thể tạo OrderID duy nhất sau nhiều lần thử.");
+            }
+
+            return newId;
+        }
 
         private string GenerateNewFoodId()
         {
@@ -262,6 +288,134 @@ namespace QuanAn.Controllers
                                      .ToList();
 
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateOrder(CreateOrderVM vm) // Trả về ActionResult
+        {
+            if (vm == null || string.IsNullOrEmpty(vm.TableName) || vm.Items == null || !vm.Items.Any())
+            {
+                TempData["ErrorMessage"] = "Dữ liệu đơn hàng không hợp lệ. Vui lòng thêm món và chọn bàn.";
+                return RedirectToAction("Menu", new { tableName = vm?.TableName }); // Giữ lại tableName nếu có
+            }
+
+            var table = db.C_Table_.FirstOrDefault(t => t.TableName.Trim().ToLower() == vm.TableName.Trim().ToLower());
+            if (table == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy bàn đã chọn. Vui lòng kiểm tra lại.";
+                return RedirectToAction("Menu", new { tableName = vm.TableName });
+            }
+
+            string newOrderId;
+            try
+            {
+                newOrderId = GenerateNewOrderId();
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Lỗi khi tạo mã đơn hàng: " + ex.Message;
+                return RedirectToAction("Menu", new { tableName = vm.TableName });
+            }
+
+            string currentUserNameFromIdentity = User.Identity.Name;
+            string trimmedCurrentUserName = currentUserNameFromIdentity?.Trim();
+
+            if (string.IsNullOrEmpty(trimmedCurrentUserName))
+            {
+                TempData["ErrorMessage"] = "Lỗi: Không tìm thấy thông tin người dùng đang đăng nhập. Vui lòng đăng nhập lại.";
+                return RedirectToAction("Menu", new { tableName = vm.TableName });
+            }
+
+            var existingUser = db.C_User_.FirstOrDefault(u => u.UserName.Trim().ToLower() == trimmedCurrentUserName.ToLower());
+
+            if (existingUser == null)
+            {
+                TempData["ErrorMessage"] = "Lỗi: Thông tin người dùng đăng nhập không tồn tại trong hệ thống. Vui lòng liên hệ quản trị viên.";
+                return RedirectToAction("Menu", new { tableName = vm.TableName });
+            }
+
+            string userIdToAssign = existingUser.UserID.Trim();
+
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var order = new C_Order_
+                    {
+                        OrderID = newOrderId,
+                        CreatedTime = DateTime.Now,
+                        Status = "Chưa làm",
+                        TableID = table.TableID,
+                        Total = 0,
+                        Discount = 0,
+                        Note = null,
+                        ReservationID = null,
+                        UserID = userIdToAssign
+                    };
+                    db.C_Order_.Add(order);
+                    db.SaveChanges();
+
+                    decimal orderTotal = 0;
+
+                    foreach (var item in vm.Items)
+                    {
+                        var food = db.C_Food_Info_.FirstOrDefault(f => f.FoodName.Trim().ToLower() == item.FoodName.Trim().ToLower());
+                        if (food == null)
+                        {
+                            Debug.WriteLine($"Warning: Food '{item.FoodName}' not found. Skipping this order item.");
+                            continue;
+                        }
+
+                        decimal actualUnitPrice = food.UnitPrice ?? 0;
+
+                        var detail = new C_Order_Detail_
+                        {
+                            OrderID = order.OrderID,
+                            FoodID = food.FoodID,
+                            Quantity = item.Quantity,
+                            UnitPrice = actualUnitPrice,
+                            Status = "Chưa làm",
+                        };
+                        db.C_Order_Detail_.Add(detail);
+
+                        orderTotal += actualUnitPrice * item.Quantity;
+                    }
+
+                    order.Total = orderTotal;
+                    db.Entry(order).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    table.Status = "Occupied";
+                    db.Entry(table).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    transaction.Commit();
+
+                    TempData["SuccessMessage"] = "Đơn hàng đã được tạo thành công!";
+                    return RedirectToAction("Menu", new { orderId = newOrderId, tableName = vm.TableName });
+                }
+                catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+                {
+                    transaction.Rollback();
+                    var fullErrorMessage = string.Join("; ", dbEx.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(v => $"{v.PropertyName}: {v.ErrorMessage}")));
+                    Debug.WriteLine($"DbEntityValidationException in CreateOrder: {fullErrorMessage}");
+                    TempData["ErrorMessage"] = "Lỗi validation khi tạo đơn hàng: " + fullErrorMessage;
+                    return RedirectToAction("Menu", new { tableName = vm.TableName });
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Debug.WriteLine($"FATAL ERROR in CreateOrder: {ex.Message}");
+                    if (ex.InnerException != null)
+                    {
+                        Debug.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    }
+                    Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+                    TempData["ErrorMessage"] = "Đã xảy ra lỗi hệ thống khi tạo đơn hàng. Vui lòng thử lại sau.";
+                    return RedirectToAction("Menu", new { tableName = vm.TableName });
+                }
+            }
         }
 
         protected override void Dispose(bool disposing)
