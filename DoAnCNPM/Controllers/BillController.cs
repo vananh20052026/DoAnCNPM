@@ -15,7 +15,7 @@ namespace QuanAn.Controllers
         private QLQuanAnEntities db = new QLQuanAnEntities();
 
         [Authorize] // Ensure only authenticated users can access the Bill page
-        public ActionResult Bill(int page = 1, int pageSize = 6)
+        public ActionResult Bill(int page = 1, int pageSize = 6, string paymentFilter = "", string dateFilter = "")
         {
             // Check if user is authenticated
             if (!User.Identity.IsAuthenticated)
@@ -29,10 +29,28 @@ namespace QuanAn.Controllers
             var currentUser = db.C_User_.FirstOrDefault(u => u.UserName.Trim().ToLower() == currentUserName.ToLower());
             ViewBag.CurrentUser = currentUser?.FullName ?? currentUserName;
 
-            // Basic bill query without filters
+            // Start with the base query
             var billQuery = db.C_Bill_.Include(b => b.C_User_).AsQueryable();
 
-            // Get total count for pagination
+            // Apply payment method filter
+            if (!string.IsNullOrEmpty(paymentFilter))
+            {
+                billQuery = billQuery.Where(b => b.Payment == paymentFilter);
+            }
+
+            // Apply date filter
+            if (!string.IsNullOrEmpty(dateFilter))
+            {
+                if (DateTime.TryParse(dateFilter, out DateTime filterDate))
+                {
+                    billQuery = billQuery.Where(b =>
+                        b.CreatedTime.HasValue &&
+                        DbFunctions.TruncateTime(b.CreatedTime.Value) == filterDate.Date
+                    );
+                }
+            }
+
+            // Get total count first (after filters but before pagination)
             var totalBillsCount = billQuery.Count();
 
             // Get paginated bills
@@ -51,11 +69,21 @@ namespace QuanAn.Controllers
                     BillID = bill.BillID,
                     CreatedTimeFormatted = (bill.CreatedTime?.ToString("dddd, dd/MM/yyyy") ?? "N/A") + "<br />" + (bill.CreatedTime?.ToString("HH:mm") + " giờ" ?? "N/A"),
                     StaffName = bill.C_User_?.FullName ?? "N/A",
-                    Payment = "Chưa thanh toán", // Basic payment status
+                    Payment = bill.Payment ?? "Chưa thanh toán",
                     TotalFormatted = (bill.Total ?? 0).ToString("N0") + " đ",
                     TotalFinalFormatted = (bill.Total ?? 0).ToString("N0") + " đ"
                 });
             }
+
+            // Get distinct payment methods for filter dropdown
+            ViewBag.PaymentMethods = db.C_Bill_
+                .Where(b => !string.IsNullOrEmpty(b.Payment))
+                .Select(b => b.Payment)
+                .Distinct()
+                .ToList();
+
+            ViewBag.PaymentFilter = paymentFilter;
+            ViewBag.DateFilter = dateFilter;
 
             var viewModel = new BillVM
             {
