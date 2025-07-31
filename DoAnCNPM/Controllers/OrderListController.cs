@@ -128,5 +128,24 @@ namespace QuanAn.Controllers
 
             return View(orderListVM);
         }
+
+        // POST: OrderList/ChangeStatus
+        [HttpPost]
+        public ActionResult ChangeStatus(string orderId, string status)
+        {
+            var masterOrderToUpdate = db.C_Order_.FirstOrDefault(o => o.OrderID == orderId);
+
+            if (masterOrderToUpdate != null)
+            {
+                masterOrderToUpdate.Status = status;
+                db.SaveChanges();
+                TempData["SuccessMessage"] = $"Đã cập nhật trạng thái Đơn hàng ID {orderId} thành {status}.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"Không tìm thấy Đơn hàng với Mã Đơn hàng {orderId}.";
+            }
+            return RedirectToAction("OrderList", new { statusFilter = Request["statusFilter"], tableFilter = Request["tableFilter"], dayFilter = Request["dayFilter"] });
+        }
     }
 }
