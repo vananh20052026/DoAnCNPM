@@ -77,5 +77,54 @@ namespace QuanAn.Controllers
 
             return View(model);
         }
+
+        // POST: Account/ProfileInfo - Cập nhật thông tin cơ bản
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ProfileInfo(ProfileInfoVM model)
+        {
+            if (Session["Username"] == null)
+                return RedirectToAction("Login", "Login");
+
+            var username = Session["Username"].ToString();
+            var user = db.C_User_.SingleOrDefault(u => u.UserName == username);
+
+            if (user == null)
+                return RedirectToAction("Menu", "Menu");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    user.FullName = model.FullName;
+
+                    if (model.Phone.HasValue)
+                    {
+                        if (model.Phone.Value > int.MaxValue)
+                        {
+                            ModelState.AddModelError("Phone", "Số điện thoại vượt quá độ dài cho phép.");
+                            model.Role = user.Role;
+                            return View(model);
+                        }
+                        user.Phone = (int)model.Phone.Value;
+                    }
+
+                    user.Email = model.Email;
+
+                    db.SaveChanges();
+                    TempData["SuccessMessage"] = "Cập nhật thông tin thành công!";
+                    return RedirectToAction("ProfileInfo");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    TempData["Debug"] = ex.ToString();
+                    ModelState.AddModelError("", "Lỗi khi lưu: " + ex.Message);
+                }
+            }
+
+            model.Role = user.Role;
+            return View(model);
+        }
     }
 }
