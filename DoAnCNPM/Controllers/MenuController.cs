@@ -1,12 +1,17 @@
+using Newtonsoft.Json;
+using PagedList;
 using QuanAn.Models;
 using QuanAn.Models.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
 
 namespace QuanAn.Controllers
 {
@@ -65,29 +70,12 @@ namespace QuanAn.Controllers
             return newId;
         }
 
-        private string GenerateNewCategoryId()
-        {
-            var lastCategory = db.C_Category_
-                .OrderByDescending(c => c.CateID)
-                .FirstOrDefault();
-
-            int nextId = 1;
-
-            if (lastCategory != null && int.TryParse(lastCategory.CateID.Trim(), out int parsedId))
-            {
-                nextId = parsedId + 1;
-            }
-
-            return nextId.ToString(); // VD: "8"
-        }
-
         public ActionResult Menu(string orderId, string tableName, string searchTerm, int? page, int? categoryCount)
         {
             var model = new MenuProductVM();
             var foods = db.C_Food_Info_.AsQueryable();
             var category = db.C_Category_.AsQueryable();
 
-            // Basic search functionality
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 model.SearchTerm = searchTerm;
@@ -96,7 +84,6 @@ namespace QuanAn.Controllers
                                           || (f.C_Category_ != null && f.C_Category_.CateName.Contains(searchTerm)));
             }
 
-            // Category filter functionality
             if (categoryCount.HasValue && categoryCount.Value != 0)
             {
                 string categoryIdAsString = categoryCount.Value.ToString();
@@ -105,6 +92,7 @@ namespace QuanAn.Controllers
 
             model.itemFoods = foods.ToList();
             model.categories = category.ToList();
+
 
             ViewBag.OrderId = orderId; 
             ViewBag.TableName = tableName;
@@ -139,6 +127,8 @@ namespace QuanAn.Controllers
 
             return RedirectToAction("FoodDetail", new { id = id.Trim() });
         }
+
+
 
         [Route("Menu/FoodDetail/{id}")]
         public ActionResult FoodDetail(string id, string orderId, string tableName)
@@ -178,6 +168,7 @@ namespace QuanAn.Controllers
 
             return View("~/Views/FoodDetail/FoodDetail.cshtml", viewModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -265,6 +256,24 @@ namespace QuanAn.Controllers
 
             return RedirectToAction("Menu");
         }
+
+        private string GenerateNewCategoryId()
+        {
+            var lastCategory = db.C_Category_
+                .OrderByDescending(c => c.CateID)
+                .FirstOrDefault();
+
+            int nextId = 1;
+
+            if (lastCategory != null && int.TryParse(lastCategory.CateID.Trim(), out int parsedId))
+            {
+                nextId = parsedId + 1;
+            }
+
+            return nextId.ToString(); // VD: "8"
+        }
+
+
 
         public ActionResult FoodList(string searchTerm, int? page)
         {
@@ -418,13 +427,110 @@ namespace QuanAn.Controllers
             }
         }
 
-        protected override void Dispose(bool disposing)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddMultipleFoodsToOrder(string orderId, string foodsData, string tableName)
         {
-            if (disposing)
+            Debug.WriteLine($"AddMultipleFoodsToOrder received: OrderId={orderId}, FoodsData={foodsData}, TableName={tableName}");
+
+            if (string.IsNullOrEmpty(orderId) || string.IsNullOrEmpty(foodsData))
             {
-                db.Dispose();
+                TempData["ErrorMessage"] = "Thiếu thông tin đơn hàng hoặc món ăn.";
+                return RedirectToAction("Menu", new { orderId = orderId, tableName = tableName });
             }
-            base.Dispose(disposing);
+
+            List<FoodAddVM> foodsToAdd;
+            try
+            {
+                foodsToAdd = JsonConvert.DeserializeObject<List<FoodAddVM>>(foodsData);
+                if (foodsToAdd == null || !foodsToAdd.Any())
+                {
+                    TempData["ErrorMessage"] = "Không có món nào được gửi để thêm vào đơn hàng.";
+                    return RedirectToAction("Menu", new { orderId = orderId, tableName = tableName });
+                }
+            }
+            catch (JsonException jEx)
+            {
+                TempData["ErrorMessage"] = "Lỗi định dạng dữ liệu món ăn khi thêm vào đơn: " + jEx.Message;
+                Debug.WriteLine($"JSON Deserialization Error in AddMultipleFoodsToOrder: {jEx.Message}");
+                return RedirectToAction("Menu", new { orderId = orderId, tableName = tableName });
+            }
+
+            try
+            {
+                var existingOrder = db.C_Order_.FirstOrDefault(o => o.OrderID.Trim() == orderId.Trim());
+                if (existingOrder == null)
+                {
+                    TempData["ErrorMessage"] = "Không tìm thấy đơn hàng để thêm món.";
+                    return RedirectToAction("Menu", new { tableName = tableName });
+                }
+
+                decimal totalAddedPrice = 0;
+
+                var groupedIncomingFoods = foodsToAdd.GroupBy(item => item.FoodID.Trim().ToLower())
+                                                     .Select(g => new
+                                                     {
+                                                         FoodId = g.Key,
+                                                         Quantity = g.Sum(item => item.Quantity),
+                                                         UnitPrice = g.First().UnitPrice
+                                                     }).ToList();
+
+                foreach (var item in groupedIncomingFoods)
+                {
+                    var food = db.C_Food_Info_.FirstOrDefault(f => f.FoodID.Trim().ToLower() == item.FoodId);
+                    if (food == null)
+                    {
+                        Debug.WriteLine($"Warning: Food with ID '{item.FoodId}' not found. Skipping this item.");
+                        continue;
+                    }
+
+                    var existingDetail = db.C_Order_Detail_
+                        .FirstOrDefault(od => od.OrderID.Trim() == orderId.Trim() && od.FoodID.Trim() == food.FoodID.Trim());
+
+                    if (existingDetail != null)
+                    {
+                        existingDetail.Quantity += item.Quantity;
+                        existingDetail.UnitPrice = food.UnitPrice ?? 0;
+                    }
+                    else
+                    {
+                        var orderDetail = new C_Order_Detail_
+                        {
+                            OrderID = orderId,
+                            FoodID = food.FoodID,
+                            Quantity = item.Quantity,
+                            UnitPrice = food.UnitPrice ?? 0,
+                            Status = "Chưa làm"
+                        };
+                        db.C_Order_Detail_.Add(orderDetail);
+                    }
+                    totalAddedPrice += (food.UnitPrice ?? 0) * item.Quantity;
+                }
+
+                existingOrder.Total = (existingOrder.Total ?? 0) + totalAddedPrice;
+
+                db.SaveChanges();
+
+                TempData["SuccessMessage"] = "Đã thêm các món vào đơn hàng thành công.";
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+            {
+                var fullErrorMessage = string.Join("; ", ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(v => $"{v.PropertyName}: {v.ErrorMessage}")));
+                Debug.WriteLine($"DbEntityValidationException in AddMultipleFoodsToOrder: {fullErrorMessage}");
+                TempData["ErrorMessage"] = "Lỗi validation khi thêm món vào đơn hàng: " + fullErrorMessage;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"FATAL ERROR in AddMultipleFoodsToOrder: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Debug.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                }
+                Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi hệ thống khi thêm món vào đơn hàng. Vui lòng thử lại sau.";
+            }
+
+            return RedirectToAction("Menu", new { orderId = orderId, tableName = tableName });
         }
     }
 }
