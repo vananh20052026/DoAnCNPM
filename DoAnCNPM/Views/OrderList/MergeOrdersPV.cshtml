@@ -1,0 +1,53 @@
+﻿@model List<QuanAn.Models.ViewModel.OrderListVM>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th style="width: 5%;">Chọn</th>
+                <th style="width: 15%;">Mã Đơn</th>
+                <th style="width: 15%;">Bàn</th>
+                <th style="width: 20%;">Nhân Viên</th>
+                <th style="width: 20%;">Thời Gian Tạo</th>
+                <th style="width: 15%;">Tổng Tiền</th>
+                <th style="width: 10%;">Trạng Thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var order in Model)
+                {
+                    <tr>
+                        <td class="text-center">
+                            <input type="checkbox" name="selectedOrderIds" value="@order.OrderID" />
+                        </td>
+                        <td>@order.OrderID</td>
+                        <td>@order.TableName</td>
+                        <td>@order.Staff</td>
+                        <td>@(order.CreatedTime.HasValue ? order.CreatedTime.Value.ToString("dd/MM/yyyy HH:mm:ss") : "N/A")</td>
+                        <td>@(order.TotalFinal.HasValue ? String.Format("{0:N0}₫", order.TotalFinal.Value) : "0₫")</td>
+                        <td>
+                            @{
+                                string badgeClass = "badge-secondary";
+                                if (order.Status == "Chưa làm") { badgeClass = "badge-warning"; }
+                                else if (order.Status == "Đang xử lý") { badgeClass = "badge-info"; }
+                                else if (order.Status == "Hoàn tất") { badgeClass = "badge-success"; }
+                                else if (order.Status == "Đã tính tiền") { badgeClass = "badge-primary"; }
+                            }
+                            <span class="badge @badgeClass">
+                                @order.Status
+                            </span>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">Không có đơn hàng nào có thể gộp để tạo hóa đơn.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

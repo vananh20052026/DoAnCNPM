@@ -1,0 +1,777 @@
+﻿@model QuanAn.Models.ViewModel.MenuProductVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" />
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+
+<link href="~/Content/css/Menu.css" rel="stylesheet" />
+<link href="~/Content/css/sanPham.css" rel="stylesheet" />
+<style>
+
+
+     .main-content {
+     background: url('@Url.Content("~/Content/img/fullban.jpg")') no-repeat center center fixed;
+     background-size: cover;
+     background-attachment: fixed;
+     padding: 30px;
+ }
+
+ .container {
+     background-color: rgba(255, 255, 255, 0.9);
+     background-color: rgba(255, 255, 255, 0.9);
+     border-radius: 16px;
+     padding: 30px;
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+ }
+
+    .card-img-top {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+        border-top-left-radius: calc(0.25rem - 1px);
+        border-top-right-radius: calc(0.25rem - 1px);
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .filter-btns .btn {
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+    .carousel-inner img {
+        height: 360px;
+        object-fit: cover;
+        width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-content {
+        text-align: center;
+    }
+
+    h3.text-primary {
+        text-align: center;
+    }
+
+    .card {
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-radius: 0.25rem;
+    }
+
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .order-card {
+        width: 100%;
+        height: 80vh;
+        position: sticky;
+        top: 20px;
+        display: flex;
+        flex-direction: column;
+        padding: 0.5vw;
+        background: white;
+        border-radius: 8px;
+    }
+
+    .order-table-container {
+        flex: 1;
+        overflow-y: auto;
+        margin-bottom: 10px;
+    }
+
+    .tableorder {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+        .tableorder thead {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+    .order-total h5{
+       color: red;
+    }
+
+    .order-button {
+        margin-top: auto;
+        width: 100%;
+        position: static;
+    }
+
+    .table * {
+    }
+
+    .order-button, .add-to-order-button {
+        margin-top: 10px;
+        position: relative;
+    }
+
+    .order-buttons-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding-top: 10px;
+    }
+
+    @@media (max-width: 767.98px) {
+        .col-md-4.order-col {
+            order: 1;
+            margin-bottom: 20px;
+        }
+
+        .col-md-8.product-grid-col {
+            order: 2;
+        }
+
+        .order-card {
+            height: auto;
+            position: static;
+        }
+    }
+
+    .add-food-card:hover {
+        background-color: #eafaf0;
+        transition: background-color 0.3s;
+    }
+
+    .food-img {
+        height: 200px;
+        object-fit: cover;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    #alert-container {
+        background-color: rgba(255, 255, 255, 0.2); /* nền trắng mờ */
+        backdrop-filter: blur(8px); /* làm mờ nền phía sau */
+        -webkit-backdrop-filter: blur(8px); /* cho Safari */
+        border-radius: 12px; /* bo góc */
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* đổ bóng nhẹ */
+    }
+
+    /* Bọc toàn bộ phần nội dung để bo góc và có nền trắng */
+    .backgroundXau {
+        background-color: rgba(255, 255, 255, 0.85);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Đảm bảo .container-main được căn giữa và không dính viền */
+    .container-main {
+        max-width: 1320px;
+        margin: 0 auto;
+    }
+
+    /*--------- CSS popup thêm món ăn (phiên bản nhỏ gọn & màu sắc cầu vồng) ----------*/
+    #addFoodModal .modal-content {
+        border-radius: 16px;
+        border: none;
+        padding: 20px 20px 15px; /* giảm padding tổng thể */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://img.freepik.com/premium-photo/seamless-pattern-cute-cartoon-food-items-with-light-peach-background_14117-924571.jpg?semt=ais_hybrid&w=740');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: #fff;
+        backdrop-filter: blur(6px);
+        text-align: center;
+        font-size: 14px; /* giảm kích cỡ chữ toàn modal */
+    }
+
+    /* Header */
+    #addFoodModal .modal-header {
+        border-bottom: none;
+        padding-bottom: 0;
+        justify-content: center;
+        padding-top: 0;
+        margin-bottom: 10px;
+    }
+
+    #addFoodModal .modal-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #00f7ff;
+    }
+
+    /* Các form-group gọn hơn */
+    #addFoodModal .form-group {
+        margin-bottom: 10px; /* giảm khoảng cách */
+    }
+
+        /* Rainbow màu cho label */
+        #addFoodModal .form-group:nth-child(1) label {
+            color: #00ff6e;
+        }
+
+        #addFoodModal .form-group:nth-child(2) label {
+            color: #ff4d4d;
+        }
+
+        #addFoodModal .form-group:nth-child(3) label {
+            color: #ffffff;
+        }
+
+        #addFoodModal .form-group:nth-child(4) label {
+            color: #ffd700;
+        }
+
+        #addFoodModal .form-group:nth-child(6) label {
+            color: #ff944d;
+        }
+
+        #addFoodModal .form-group:nth-child(7) label {
+            color: #ff66b2;
+        }
+
+        #addFoodModal .form-group label {
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+    /* Inputs */
+    #addFoodModal .form-control {
+        border-radius: 6px;
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+
+        /* Focus */
+        #addFoodModal .form-control:focus {
+            border-color: #28a745;
+            box-shadow: none;
+        }
+
+    /* Checkbox */
+    #addFoodModal .form-check {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        color: #fff;
+        font-size: 13px;
+    }
+
+    #addFoodModal .form-check-input {
+        margin-right: 8px;
+        transform: scale(1.1);
+    }
+
+    #addFoodModal .form-check-label {
+        color: #ff80df;
+        font-weight: 500;
+    }
+
+    /* Buttons */
+    #addFoodModal .modal-footer {
+        border-top: none;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        padding-top: 10px;
+        padding-bottom: 0;
+        margin-top: 10px;
+    }
+
+    #addFoodModal .btn-primary,
+    #addFoodModal .btn-secondary {
+        border-radius: 6px;
+        padding: 6px 16px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    #addFoodModal .btn-primary {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    #addFoodModal .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    #addFoodModal .btn:hover {
+        opacity: 0.9;
+    }
+
+    /* Căn giữa body */
+    #addFoodModal .modal-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+    }
+
+    /* Responsive */
+    @@media (min-width: 576px) {
+        #addFoodModal .modal-dialog {
+            max-width: 450px;
+        }
+    }
+</style>
+<div class="backgroundXau">
+
+    <div class="container-main mt-4">
+
+        <div class="container mt-3" id="alert-container">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+        </div>
+
+        <div id="carouselbanner" class="carousel slide mb-4" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="https://simg.zalopay.com.vn/zlp-website/assets/quan_com_que_thumbnail_00608abb8d.jpg" alt="First slide" />
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="https://cdn.xanhsm.com/2025/01/d4ab8f09-quan-an-quan-1-6.jpg" alt="Second slide" />
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="https://cdn.xanhsm.com/2025/01/4af9ae6f-an-trua-quan-1-1.jpg" alt="Third slide" />
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="https://mia.vn/media/uploads/blog-du-lich/diem-danh-6-quan-an-trua-da-nang-ngon-ba-chay-3-1636336180.jpg" alt="Fourth slide" />
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselbanner" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselbanner" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <section class="search-content mb-4">
+            @using (Html.BeginForm("Menu", "Menu", FormMethod.Get))
+            {
+                @Html.TextBoxFor(m => m.SearchTerm, new
+                {
+                    @class = "form-control d-inline-block w-50",
+                    placeholder = "Nhập tên, mô tả hoặc loại sản phẩm"
+                })
+
+                <button type="submit" class="btn btn-primary ml-2">Tìm kiếm</button>
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="orderId" value="@ViewBag.OrderId" />
+                <input type="hidden" name="tableName" value="@ViewBag.TableName" />
+            }
+        </section>
+
+
+        @{
+            var categories = ViewBag.CategoryList as List<QuanAn.Models.C_Category_>;
+        }
+
+    <div class="filter-btns mb-4 text-center">
+        @if (categories != null)
+        {
+            // Nút 'Tất cả'
+            <a href="@Url.Action("Menu", new { categoryCount = 0, searchTerm = Model.SearchTerm, orderId = ViewBag.OrderId, tableName = ViewBag.TableName })"
+               class="btn @(ViewBag.CategoryCount == null || ViewBag.CategoryCount == 0 ? "btn-primary text-white" : "btn-outline-secondary") m-1">
+                Tất Cả
+            </a>
+
+            // Các nút danh mục
+            foreach (var cat in categories)
+            {
+                var isActive = (ViewBag.CategoryCount != null && ViewBag.CategoryCount == int.Parse(cat.CateID))
+                    ? "btn-primary text-white"
+                    : "btn-outline-secondary";
+
+                <a href="@Url.Action("Menu", new { categoryCount = cat.CateID, searchTerm = Model.SearchTerm, orderId = ViewBag.OrderId, tableName = ViewBag.TableName })"
+                   class="btn @isActive m-1">
+                    @cat.CateName
+                </a>
+            }
+        }
+    </div>
+
+
+        <div class="row">
+            <div class="col-md-8 product-grid-col">
+                <h3 class="mb-3 text-primary">@ViewBag.CategoryTitle</h3>
+
+                <div class="row">
+                    @foreach (var food in Model.itemFoods)
+                    {
+                        <div class="col-md-6 mb-4 d-flex align-items-stretch">
+                            <div class="card w-100">
+                                <a href="@Url.Action("FoodDetail", "Menu", new { id = food.FoodID.Trim(), orderId = ViewBag.OrderId, tableName = ViewBag.TableName })">
+                                    <img class="card-img-top" src="@food.FoodImage" alt="@food.FoodName" />
+                                </a>
+                                <div class="card-body d-flex flex-column">
+                                    <a href="@Url.Action("FoodDetail", "Menu", new { id = food.FoodID.Trim(), orderId = ViewBag.OrderId, tableName = ViewBag.TableName })">
+                                        <h5 class="card-title">@food.FoodName</h5>
+                                    </a>
+                                    <p class="card-text text-danger font-weight-bold">@Convert.ToDecimal(food.UnitPrice).ToString("N0") VND</p>
+                                    <button onclick="AddMon('@food.FoodID.Trim()', '@food.FoodName', @(food.UnitPrice ?? 0))" class="btn btn-primary mt-auto">
+                                        Thêm Vào Order
+                                    </button>
+                                    <a href="@Url.Action("FoodDetail", "Menu", new { id = food.FoodID.Trim(), orderId = ViewBag.OrderId, tableName = ViewBag.TableName })" class="btn btn-outline-secondary mt-2">
+                                        Xem Chi Tiết
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <!-- ⬇️ Thêm NÚT “Thêm món” ở đây, để cùng 1 row với các món ăn -->
+                    <div class="col-md-6 mb-4 d-flex align-items-stretch">
+                        <div class="card w-100 border-success text-center add-food-card shadow-sm"
+                             data-toggle="modal" data-target="#addFoodModal"
+                             style="cursor: pointer;">
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                <div class="rounded-circle border border-success d-flex justify-content-center align-items-center mb-2"
+                                     style="width: 60px; height: 60px; font-size: 36px; color: #28a745;">
+                                    +
+                                </div>
+                                <h5 class="text-success m-0">Thêm món</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 order-col">
+                <div class="order-card">
+                    <h5>Order</h5>
+                    <h4 id="getban">Bàn: @(ViewBag.TableName ?? "Chưa chọn")</h4>
+                    <h5 id="getOrderId">Mã đơn: @(ViewBag.OrderId ?? "Chưa có")</h5>
+                    <div class="order-table-container">
+                        <table class="table tableorder" id="tableorder">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tên Món</th>
+                                    <th scope="col">Số Lượng</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="order-total text-right mt-3 pr-2">
+                        <h5 class="font-weight-bold">Tổng giá: <span id="totalPrice">0 VND</span></h5>
+                    </div>
+                    <div class="order-buttons-container">
+                        <button type="button" class="btn btn-success btn-lg add-to-order-button" id="addMultipleFoodsButton" style="display:none;">Thêm món vào Order</button>
+                        <button type="button" class="btn btn-primary btn-lg order-button" id="createOrderButton">Tạo Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4" />
+    </div>
+    @*-------------------------popup--------------------------------*@
+    <div class="modal fade" id="addFoodModal" tabindex="-1" role="dialog" aria-labelledby="addFoodModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("AddFood", "Menu", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addFoodModalLabel">Thêm Món Mới</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="FoodName">Tên món ăn</label>
+                            <input type="text" name="FoodName" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="UnitPrice">Giá</label>
+                            <input type="number" name="UnitPrice" class="form-control" required min="0" step="5000" />
+                        </div>
+                        <div class="form-group">
+                            <label for="FoodImageUrl">Link ảnh món ăn</label> <!-- ✅ đổi thành text -->
+                            <input type="text" name="FoodImageUrl" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="CategoryID">Loại</label>
+                            <select name="CategoryID" class="form-control" id="categoryDropdown">
+                                @foreach (var cat in ViewBag.CategoryList)
+                                {
+                                    <option value="@cat.CateID">@cat.CateName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="newCategoryCheck" onchange="toggleNewCategory()">
+                            <label class="form-check-label" for="newCategoryCheck">Thêm danh mục mới</label>
+                        </div>
+
+                        <div class="form-group" id="newCategoryDiv" style="display:none;">
+                            <label for="NewCategoryName">Tên danh mục mới</label>
+                            <input type="text" name="NewCategoryName" class="form-control" />
+                        </div>
+
+                        <script>
+                            function toggleNewCategory() {
+                                const checkbox = document.getElementById("newCategoryCheck");
+                                const newCatDiv = document.getElementById("newCategoryDiv");
+                                const dropdown = document.getElementById("categoryDropdown");
+
+                                if (checkbox.checked) {
+                                    newCatDiv.style.display = "block";
+                                    dropdown.disabled = true;
+                                } else {
+                                    newCatDiv.style.display = "none";
+                                    dropdown.disabled = false;
+                                }
+                            }
+                        </script>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Lưu món</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const currentOrderId = "@(ViewBag.OrderId ?? "")";
+    const currentTableName = "@(ViewBag.TableName ?? "Chưa chọn")";
+
+    document.getElementById("getban").textContent = "Bàn: " + currentTableName;
+    document.getElementById("getOrderId").textContent = "Mã đơn: " + (currentOrderId || "Chưa có");
+
+    const tableBody = document.getElementById("tableorder").getElementsByTagName("tbody")[0];
+    let orderItems = JSON.parse(localStorage.getItem("currentOrderItems")) || [];
+
+    function renderOrderTable() {
+        tableBody.innerHTML = '';
+        orderItems.forEach((item, index) => {
+            const newRow = tableBody.insertRow();
+            newRow.insertCell(0).textContent = item.foodName;
+            const quantityCell = newRow.insertCell(1);
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.value = item.quantity;
+            quantityInput.min = '1';
+            quantityInput.style.width = '60px';
+            quantityInput.addEventListener('change', function() {
+                updateQuantity(index, parseInt(this.value));
+            });
+            quantityCell.appendChild(quantityInput);
+            newRow.insertCell(2).textContent = item.unitPrice.toLocaleString('vi-VN') + ' VND';
+
+            const deleteCell = newRow.insertCell(3);
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'btn btn-danger btn-sm';
+            deleteButton.style.width = '80px';
+            deleteButton.textContent = 'Xóa';
+            deleteButton.onclick = function() {
+                removeMon(index);
+            };
+            deleteCell.appendChild(deleteButton);
+        });
+        updateTotalPrice();
+    }
+
+    function AddMon(foodId, foodName, unitPrice) {
+        const existingItemIndex = orderItems.findIndex(item => item.foodId === foodId);
+
+        if (existingItemIndex > -1) {
+            orderItems[existingItemIndex].quantity += 1;
+        } else {
+            orderItems.push({ foodId: foodId, foodName: foodName, quantity: 1, unitPrice: unitPrice });
+        }
+        localStorage.setItem("currentOrderItems", JSON.stringify(orderItems));
+        renderOrderTable();
+    }
+
+    function updateTotalPrice() {
+        let total = 0;
+        orderItems.forEach(item => {
+            total += item.unitPrice * item.quantity;
+        });
+        document.getElementById("totalPrice").textContent = total.toLocaleString('vi-VN') + " VND";
+    }
+
+    function updateQuantity(index, newQuantity) {
+        if (newQuantity < 1) newQuantity = 1;
+        orderItems[index].quantity = newQuantity;
+        localStorage.setItem("currentOrderItems", JSON.stringify(orderItems));
+        updateTotalPrice(); // chỉ cập nhật tổng giá, không render lại bảng
+    }
+
+    function removeMon(index) {
+        orderItems.splice(index, 1);
+        if (orderItems.length === 0) {
+            localStorage.removeItem("currentOrderItems");
+        } else {
+            localStorage.setItem("currentOrderItems", JSON.stringify(orderItems));
+        }
+        renderOrderTable();
+    }
+
+    const createOrderButton = document.getElementById('createOrderButton');
+    const addMultipleFoodsButton = document.getElementById('addMultipleFoodsButton');
+
+    if (currentOrderId && currentOrderId.trim() !== '') {
+        createOrderButton.style.display = 'none';
+        addMultipleFoodsButton.style.display = 'block';
+    } else {
+        createOrderButton.style.display = 'block';
+        addMultipleFoodsButton.style.display = 'none';
+    }
+
+    createOrderButton.addEventListener('click', function () {
+        if (orderItems.length === 0) {
+            alert("Vui lòng thêm món vào giỏ hàng trước khi tạo đơn!");
+            return;
+        }
+
+        if (!currentTableName || currentTableName.trim() === '' || currentTableName.trim() === 'Chưa chọn bàn') {
+            alert("Vui lòng chọn bàn trước khi tạo đơn hàng!");
+            return;
+        }
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '@Url.Action("CreateOrder", "Menu")';
+
+        const antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '__RequestVerificationToken';
+        tokenInput.value = antiForgeryToken;
+        form.appendChild(tokenInput);
+
+        const tableNameInput = document.createElement('input');
+        tableNameInput.type = 'hidden';
+        tableNameInput.name = 'TableName';
+        tableNameInput.value = currentTableName;
+        form.appendChild(tableNameInput);
+
+        orderItems.forEach((item, index) => {
+            const foodIdInput = document.createElement('input');
+            foodIdInput.type = 'hidden';
+            foodIdInput.name = `Items[${index}].FoodID`;
+            foodIdInput.value = item.foodId;
+            form.appendChild(foodIdInput);
+
+            const foodNameInput = document.createElement('input');
+            foodNameInput.type = 'hidden';
+            foodNameInput.name = `Items[${index}].FoodName`;
+            foodNameInput.value = item.foodName;
+            form.appendChild(foodNameInput);
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'hidden';
+            quantityInput.name = `Items[${index}].Quantity`;
+            quantityInput.value = item.quantity;
+            form.appendChild(quantityInput);
+
+            const unitPriceInput = document.createElement('input');
+            unitPriceInput.type = 'hidden';
+            unitPriceInput.name = `Items[${index}].UnitPrice`;
+            unitPriceInput.value = item.unitPrice;
+            form.appendChild(unitPriceInput);
+        });
+
+        localStorage.removeItem("currentOrderItems");
+
+        document.body.appendChild(form);
+        form.submit();
+    });
+
+    addMultipleFoodsButton.addEventListener('click', function () {
+        if (orderItems.length === 0) {
+            alert("Không có món nào để thêm vào đơn hàng hiện có.");
+            return;
+        }
+        if (!currentOrderId || currentOrderId.trim() === '') {
+            alert("Không có mã đơn hàng để thêm món. Vui lòng tạo đơn mới trước.");
+            return;
+        }
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '@Url.Action("AddMultipleFoodsToOrder", "Menu")';
+
+        const antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '__RequestVerificationToken';
+        tokenInput.value = antiForgeryToken;
+        form.appendChild(tokenInput);
+
+        const orderIdInput = document.createElement('input');
+        orderIdInput.type = 'hidden';
+        orderIdInput.name = 'orderId';
+        orderIdInput.value = currentOrderId;
+        form.appendChild(orderIdInput);
+
+        const foodsDataInput = document.createElement('input');
+        foodsDataInput.type = 'hidden';
+        foodsDataInput.name = 'foodsData';
+        foodsDataInput.value = JSON.stringify(orderItems.map(item => ({
+            FoodID: item.foodId,
+            Quantity: item.quantity,
+            UnitPrice: item.unitPrice
+        })));
+        form.appendChild(foodsDataInput);
+
+        const tableNameInput = document.createElement('input');
+        tableNameInput.type = 'hidden';
+        tableNameInput.name = 'tableName';
+        tableNameInput.value = currentTableName;
+        form.appendChild(tableNameInput);
+
+        localStorage.removeItem("currentOrderItems");
+
+        document.body.appendChild(form);
+        form.submit();
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        renderOrderTable();
+    });
+
+    setTimeout(function () {
+        $(".alert").fadeOut("slow");
+    }, 3000); // 3 giây
+</script>
