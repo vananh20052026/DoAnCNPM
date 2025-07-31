@@ -375,5 +375,98 @@ namespace QuanAn.Controllers
             TempData["SuccessMessage"] = $"Đã tạo hóa đơn {newBillID} thành công cho đơn hàng {orderId}. Trạng thái đơn hàng đã được cập nhật thành 'Đã tạo bill'.";
             return RedirectToAction("OrderList");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ProcessMergedBill(List<string> selectedOrderIds)
+        {
+            if (selectedOrderIds == null || !selectedOrderIds.Any())
+            {
+                TempData["ErrorMessage"] = "Vui lòng chọn ít nhất một đơn hàng để gộp.";
+                return RedirectToAction("OrderList");
+            }
+
+            try
+            {
+                var ordersToMerge = db.C_Order_
+                                      .Include(o => o.C_Order_Detail_)
+                                      .Include(o => o.C_Table_)
+                                      .Where(o => selectedOrderIds.Contains(o.OrderID))
+                                      .ToList();
+
+                if (ordersToMerge.Count != selectedOrderIds.Count)
+                {
+                    TempData["ErrorMessage"] = "Không tìm thấy tất cả các đơn hàng đã chọn.";
+                    return RedirectToAction("OrderList");
+                }
+
+                if (ordersToMerge.Any(o => o.Status != "Hoàn tất"))
+                {
+                    TempData["ErrorMessage"] = "Chỉ có thể gộp các đơn hàng đã 'Hoàn tất'.";
+                    return RedirectToAction("OrderList");
+                }
+
+                string mergedBillId = selectedOrderIds.First();
+                if (db.C_Bill_.Any(b => b.BillID == mergedBillId))
+                {
+                    TempData["ErrorMessage"] = $"Hóa đơn {mergedBillId} đã tồn tại.";
+                    return RedirectToAction("OrderList");
+                }
+
+                decimal? totalSum = 0;
+                decimal? discountSum = 0;
+                string staffId = Session["UserID"] as string;
+                DateTime createdTime = DateTime.Now;
+
+                foreach (var order in ordersToMerge)
+                {
+                    totalSum += order.Total;
+                    discountSum += order.Discount;
+
+                    order.Status = "Đã tạo bill";
+                    if (order.C_Table_ != null)
+                        order.C_Table_.Status = "Trống";
+
+                    foreach (var detail in order.C_Order_Detail_)
+                        detail.Status = "Hoàn tất";
+                }
+
+                var newBill = new C_Bill_
+                {
+                    BillID = mergedBillId,
+                    Total = totalSum,
+                    Discount = discountSum,
+                    TotalFinal = (totalSum ?? 0) - (discountSum ?? 0),
+                    Payment = "Chưa thanh toán",
+                    CreatedTime = createdTime,
+                    UserID = staffId
+                };
+                db.C_Bill_.Add(newBill);
+
+                foreach (var order in ordersToMerge)
+                {
+                    var totalQuantity = order.C_Order_Detail_.Sum(d => d.Quantity ?? 0);
+                    var totalAmount = order.C_Order_Detail_.Sum(d => (d.Quantity ?? 0) * (d.UnitPrice ?? 0));
+
+                    var billDetail = new C_Bill_Detail_
+                    {
+                        BillID = mergedBillId,
+                        OrderID = order.OrderID,
+                        Quantity = totalQuantity,
+                        UnitPrice = totalAmount
+                    };
+                    db.C_Bill_Detail_.Add(billDetail);
+                }
+
+                db.SaveChanges();
+                TempData["SuccessMessage"] = $"Đã gộp thành công các đơn hàng và tạo hóa đơn {mergedBillId}.";
+                return RedirectToAction("OrderList");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Lỗi hệ thống khi gộp đơn hàng: " + ex.Message;
+                return RedirectToAction("OrderList");
+            }
+        }
     }
 }
