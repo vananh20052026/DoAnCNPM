@@ -210,10 +210,123 @@ namespace QuanAn.Controllers
                 return RedirectToAction("Bill");
             }
 
-            // Basic payment processing will be implemented in next version
-            TempData["SuccessMessage"] = $"Đang xử lý thanh toán cho đơn hàng {orderId}...";
+            // 🔍 Tìm BillID qua bảng Bill_Detail (nếu đã tạo bill cho đơn gộp)
+            string existingBillId = db.C_Bill_Detail_
+                .Where(bd => bd.OrderID == orderId)
+                .Select(bd => bd.BillID)
+                .FirstOrDefault();
+
+            var existingBill = db.C_Bill_.FirstOrDefault(b => b.BillID == existingBillId);
+
+            var relatedOrderIds = db.C_Bill_Detail_
+                .Where(bd => bd.BillID == existingBillId)
+                .Select(bd => bd.OrderID)
+                .ToList();
+
+            var allOrderDetails = db.C_Order_Detail_
+                .Where(od => relatedOrderIds.Contains(od.OrderID))
+                .ToList();
+
+            if (!allOrderDetails.Any())
+            {
+                TempData["ErrorMessage"] = "Đơn hàng không có món để thanh toán.";
+                return RedirectToAction("Bill");
+            }
+
+            decimal tongTienHang = allOrderDetails.Sum(od => (od.Quantity ?? 0) * (od.UnitPrice ?? 0));
+            decimal giamGiaGoc = relatedOrderIds.Sum(id => db.C_Order_.Where(o => o.OrderID == id).Select(o => o.Discount ?? 0).FirstOrDefault());
+            decimal giamGiaThem = tongTienHang * (discountPercent / 100);
+            decimal tongGiamGia = giamGiaGoc + giamGiaThem;
+            decimal tongTienSauGiam = tongTienHang - tongGiamGia;
+
+            if (existingBill != null && order.Status == "Đã tạo bill")
+            {
+                existingBill.Payment = paymentMethod;
+                existingBill.Discount = tongGiamGia;
+                existingBill.TotalFinal = tongTienSauGiam;
+                existingBill.UserID = userId;
+
+                foreach (var orderIdInBill in relatedOrderIds)
+                {
+                    var o = db.C_Order_.FirstOrDefault(x => x.OrderID == orderIdInBill);
+                    if (o != null)
+                    {
+                        o.Status = "Đã thanh toán";
+                        o.Discount = db.C_Order_Detail_
+                            .Where(d => d.OrderID == o.OrderID)
+                            .Sum(d => (d.Quantity ?? 0) * (d.UnitPrice ?? 0)) * (discountPercent / 100);
+
+                        if (o.C_Table_ != null)
+                            o.C_Table_.Status = "Available";
+                    }
+                }
+
+                try
+                {
+                    db.SaveChanges();
+                    TempData["SuccessMessage"] = $"Thanh toán thành công! Người xử lý: {userDisplayName}";
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "Lỗi khi thanh toán: " + ex.Message;
+                }
+
+                return RedirectToAction("Bill");
+            }
+
+            if (existingBill != null)
+            {
+                TempData["ErrorMessage"] = "Đơn đã được thanh toán hoặc đã gộp vào bill.";
+                return RedirectToAction("Bill");
+            }
+
+            // ❗ Trường hợp tạo bill mới cho đơn chưa gộp
+            string newBillId = Guid.NewGuid().ToString("N").Substring(0, 10);
+            while (db.C_Bill_.Any(b => b.BillID == newBillId))
+            {
+                newBillId = Guid.NewGuid().ToString("N").Substring(0, 10);
+            }
+
+            var newBill = new C_Bill_
+            {
+                BillID = newBillId,
+                OrderID = order.OrderID,
+                UserID = userId,
+                CreatedTime = DateTime.Now,
+                Total = tongTienHang,
+                Discount = tongGiamGia,
+                TotalFinal = tongTienSauGiam,
+                Payment = paymentMethod
+            };
+            db.C_Bill_.Add(newBill);
+
+            var newDetail = new C_Bill_Detail_
+            {
+                BillID = newBillId,
+                OrderID = order.OrderID,
+                Quantity = allOrderDetails.Sum(od => od.Quantity ?? 0),
+                UnitPrice = tongTienHang
+            };
+            db.C_Bill_Detail_.Add(newDetail);
+
+            order.Status = "Đã thanh toán";
+            order.Discount = tongGiamGia;
+            if (order.C_Table_ != null)
+                order.C_Table_.Status = "Available";
+
+            try
+            {
+                db.SaveChanges();
+                TempData["SuccessMessage"] = $"Thanh toán thành công! Người xử lý: {userDisplayName}";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Lỗi khi lưu hóa đơn: " + ex.Message;
+            }
+
             return RedirectToAction("Bill");
         }
+
 
         // Update the GetPaymentDisplayStatus method to only use Payment field
         private string GetPaymentDisplayStatus(C_Bill_ bill, string orderStatus)
