@@ -208,5 +208,83 @@ namespace QuanAn.Controllers
 
             return RedirectToAction("OrderList", new { statusFilter = Request["statusFilter"], tableFilter = Request["tableFilter"], dayFilter = Request["dayFilter"] });
         }
+
+        // POST: OrderList/AddFoodToOrder
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddFoodToOrder(string orderId, string foodId, int quantity)
+        {
+            if (string.IsNullOrEmpty(orderId) || string.IsNullOrEmpty(foodId) || quantity <= 0)
+            {
+                TempData["ErrorMessage"] = "Thông tin món ăn hoặc số lượng không hợp lệ.";
+                return RedirectToAction("AddFoodToOrder", new { orderId = orderId });
+            }
+
+            var masterOrder = db.C_Order_.Include(o => o.C_Order_Detail_).FirstOrDefault(o => o.OrderID == orderId);
+            var foodToAdd = db.C_Food_Info_.FirstOrDefault(f => f.FoodID == foodId);
+
+            if (masterOrder == null)
+            {
+                TempData["ErrorMessage"] = $"Không tìm thấy đơn hàng với mã **{orderId}**.";
+                return RedirectToAction("OrderList");
+            }
+
+            if (foodToAdd == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy món ăn đã chọn.";
+                return RedirectToAction("AddFoodToOrder", new { orderId = orderId });
+            }
+
+            var existingOrderDetail = masterOrder.C_Order_Detail_.FirstOrDefault(od => od.FoodID == foodId);
+
+            if (existingOrderDetail != null)
+            {
+                // Món ăn đã có trong đơn hàng, cập nhật số lượng
+                existingOrderDetail.Quantity += quantity;
+                existingOrderDetail.Status = "Chưa làm"; // Đặt lại trạng thái món thành 'Chưa làm' nếu thêm số lượng
+            }
+            else
+            {
+                // Món ăn chưa có trong đơn hàng, thêm mới
+                var newOrderDetail = new C_Order_Detail_
+                {
+                    OrderID = orderId,
+                    FoodID = foodId,
+                    Quantity = quantity,
+                    UnitPrice = foodToAdd.UnitPrice,
+                    Status = "Chưa làm" // Món mới thêm mặc định là 'Chưa làm'
+                };
+                db.C_Order_Detail_.Add(newOrderDetail);
+            }
+
+            // Cập nhật tổng tiền của đơn hàng
+            masterOrder.Total = masterOrder.C_Order_Detail_.Sum(od => (decimal?)od.Quantity * (od.UnitPrice ?? 0)) - (masterOrder.Discount ?? 0);
+
+            if (masterOrder.C_Order_Detail_.Any(od => od.Status == "Đang xử lý"))
+            {
+                masterOrder.Status = "Đang xử lý";
+            }
+            else if (masterOrder.C_Order_Detail_.All(od => od.Status == "Hoàn tất"))
+            {
+                masterOrder.Status = "Hoàn tất";
+            }
+            else
+            {
+                masterOrder.Status = "Chưa làm";
+            }
+
+            // Nếu đơn hàng trước đó là 'Hoàn tất' và giờ thêm món mới, chuyển về 'Đang xử lý' hoặc 'Chưa làm'
+            // Tránh trường hợp đơn hàng đã hoàn tất nhưng lại thêm món mới mà trạng thái vẫn là hoàn tất.
+            if (masterOrder.Status == "Hoàn tất" && masterOrder.C_Order_Detail_.Any(od => od.Status == "Chưa làm"))
+            {
+                masterOrder.Status = "Chưa làm";
+            }
+
+
+            db.SaveChanges();
+
+            TempData["SuccessMessage"] = $"Đã thêm {quantity} món {foodToAdd.FoodName} vào đơn hàng {orderId} thành công.";
+            return RedirectToAction("OrderList", new { statusFilter = Request["statusFilter"], tableFilter = Request["tableFilter"], dayFilter = Request["dayFilter"] });
+        }
     }
 }
