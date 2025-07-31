@@ -1,0 +1,605 @@
+﻿@model QuanAn.Models.ViewModel.BillVM
+
+@{
+    ViewBag.Title = "Hóa đơn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<style>
+
+        .main-content {
+    background: url('@Url.Content("~/Content/img/background3.jpg")') no-repeat center center fixed;
+    background-size: cover;
+    background-attachment: fixed;
+    padding: 30px;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+    .bill-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 24px;
+        background: #fff;
+        margin-bottom: 32px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .bill-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .bill-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+            color: #343a40;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bill-card .status-tag {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .bill-card .status-paid {
+            background-color: #28a745; /* Dark green for "Tiền mặt" / Paid */
+        }
+
+        .bill-card .status-unpaid {
+            background-color: #ffc107; /* Orange-yellow for "Chưa tính tiền" / Unpaid */
+            color: #343a40; /* Dark text for better contrast */
+        }
+
+        .bill-card .status-other {
+            background-color: #6c757d; /* Grey for other/unknown statuses */
+        }
+
+        .bill-card .info-line {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 4px;
+        }
+
+        .bill-card table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .bill-card th, .bill-card td {
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid #f2f2f2;
+            font-size: 0.9em;
+        }
+
+        .bill-card th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .bill-card tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .bill-card .total-row td {
+            font-weight: bold;
+            border-top: 2px solid #ddd;
+            font-size: 1.05em;
+            padding-top: 10px;
+        }
+
+        .bill-card .final-total-row td {
+            border-top: 2px solid #28a745;
+            font-size: 1.2em;
+        }
+
+        .bill-card .total-price-final {
+            color: #28a745;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+    .btn-action-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+        .btn-action-group .btn {
+            flex: 1;
+            font-weight: bold;
+        }
+</style>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["SuccessMessage"] as string ?? ""))';
+            var errorMessage = '@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["ErrorMessage"] as string ?? ""))';
+
+            if (successMessage) {
+                $('#successModal').modal('show');
+            }
+            if (errorMessage) {
+                alert(errorMessage);
+            }
+
+            // Handle payment modal
+            $('#paymentModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var orderId = button.data('order-id');
+                var billCard = button.closest('.bill-card');
+
+                // Get original total from the bill card
+                var totalText = billCard.find('.total-price-final strong').text();
+                var originalTotal = parseFloat(totalText.replace(/[^\d]/g, ''));
+
+                $('#selectedOrderId').val(orderId);
+                $('#originalTotal').val(originalTotal);
+                $('#discountPercent').val(0);
+
+                updateTotalDisplay();
+            });
+
+            // Handle discount percentage change
+            $('#discountPercent').on('input', function() {
+                updateTotalDisplay();
+            });
+
+            // Function to update total display
+            function updateTotalDisplay() {
+                var originalTotal = parseFloat($('#originalTotal').val()) || 0;
+                var discountPercent = parseFloat($('#discountPercent').val()) || 0;
+
+                var discountAmount = originalTotal * (discountPercent / 100);
+                var finalTotal = originalTotal - discountAmount;
+
+                $('#displayOriginalTotal').text(originalTotal.toLocaleString('vi-VN') + ' đ');
+                $('#displayDiscountAmount').text(discountAmount.toLocaleString('vi-VN') + ' đ');
+                $('#displayFinalTotal').text(finalTotal.toLocaleString('vi-VN') + ' đ');
+            }
+
+            // Handle payment confirmation
+            $('#confirmPaymentBtn').click(function () {
+                var paymentMethod = $('#paymentMethod').val();
+                var orderId = $('#selectedOrderId').val();
+                var discountPercent = $('#discountPercent').val();
+
+                if (!paymentMethod) {
+                    alert('Vui lòng chọn phương thức thanh toán!');
+                    return;
+                }
+
+                // Hide payment modal
+                $('#paymentModal').modal('hide');
+
+                // Submit payment form
+                var form = $('<form>', {
+                    'method': 'POST',
+                    'action': '@Url.Action("PayBill", "Bill")'
+                });
+
+                form.append($('<input>', {
+                    'type': 'hidden',
+                    'name': 'orderId',
+                    'value': orderId
+                }));
+
+                form.append($('<input>', {
+                    'type': 'hidden',
+                    'name': 'paymentMethod',
+                    'value': paymentMethod
+                }));
+
+                form.append($('<input>', {
+                    'type': 'hidden',
+                    'name': 'discountPercent',
+                    'value': discountPercent
+                }));
+
+                $('body').append(form);
+                form.submit();
+            });
+
+            // Handle payment modal - Add authentication check
+            $('#paymentModal').on('show.bs.modal', function (event) {
+                // Check if user is authenticated (you can add this check)
+                var isAuthenticated = '@User.Identity.IsAuthenticated'.toLowerCase() === 'true';
+
+                if (!isAuthenticated) {
+                    alert('Bạn phải đăng nhập để thực hiện thanh toán.');
+                    window.location.href = '@Url.Action("Login", "Account")';
+                    return false;
+                }
+
+                var button = $(event.relatedTarget);
+                var orderId = button.data('order-id');
+                var billCard = button.closest('.bill-card');
+
+                // Get original total from the bill card
+                var totalText = billCard.find('.total-price-final strong').text();
+                var originalTotal = parseFloat(totalText.replace(/[^\d]/g, ''));
+
+                $('#selectedOrderId').val(orderId);
+                $('#originalTotal').val(originalTotal);
+                $('#discountPercent').val(0);
+
+                updateTotalDisplay();
+            });
+
+            // Handle success modal close - reload page to show updated status
+            $('#successModal').on('hidden.bs.modal', function () {
+                window.location.reload();
+            });
+
+            // Also handle the close button click
+            $('#successModal .btn-success').click(function() {
+                window.location.reload();
+            });
+        });
+    </script>
+}
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary">🧾 Danh Sách Hóa Đơn</h2>
+
+    <!-- Filter Form -->
+    <form method="get" class="form-inline mb-4 justify-content-center">
+        <div class="form-group mr-3">
+            <label for="paymentFilter" class="mr-2">💳 Phương thức thanh toán:</label>
+            <select name="paymentFilter" id="paymentFilter" class="form-control" onchange="this.form.submit()">
+                <option value="">-- Tất cả --</option>
+                @if (ViewBag.PaymentMethods != null)
+                {
+                    foreach (var method in ViewBag.PaymentMethods as List<string>)
+                    {
+                        <option value="@method" @(ViewBag.PaymentFilter == method ? "selected" : "")>@method</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group mr-3">
+            <label for="dateFilter" class="mr-2">📅 Ngày tạo:</label>
+            <input type="date" name="dateFilter" id="dateFilter" class="form-control"
+                   value="@ViewBag.DateFilter" onchange="this.form.submit()" />
+        </div>
+
+        <button type="submit" class="btn btn-secondary mr-2">Lọc</button>
+        <a href="@Url.Action("Bill", "Bill")" class="btn btn-outline-secondary">Xóa bộ lọc</a>
+
+        <!-- Hidden inputs to preserve pagination settings -->
+        <input type="hidden" name="page" value="1" />
+        <input type="hidden" name="pageSize" value="@Model.PageSize" />
+    </form>
+
+    <!-- Filter Summary -->
+    @if (!string.IsNullOrEmpty(ViewBag.PaymentFilter as string) || !string.IsNullOrEmpty(ViewBag.DateFilter as string))
+    {
+        <div class="alert alert-info">
+            <strong>🔍 Đang lọc theo:</strong>
+            @if (!string.IsNullOrEmpty(ViewBag.PaymentFilter as string))
+            {
+                <span class="badge badge-primary mr-2">Phương thức: @ViewBag.PaymentFilter</span>
+            }
+            @if (!string.IsNullOrEmpty(ViewBag.DateFilter as string))
+            {
+                <span class="badge badge-primary mr-2">Ngày: @ViewBag.DateFilter</span>
+            }
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @Html.Raw(TempData["ErrorMessage"])
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <div class="row justify-content-center">
+        @if (Model != null && Model.Bills != null && Model.Bills.Any())
+        {
+            foreach (var bill in Model.Bills)
+            {
+                int totalQuantityOfBill = bill.AggregatedFoodItems?.Sum(item => item.TotalQuantity) ?? 0;
+
+                string statusClass = "";
+                string displayStatus = bill.Payment;
+                if (bill.Payment == "Tiền mặt" || bill.Payment == "Đã tính tiền" || bill.Payment == "Đã thanh toán")
+                {
+                    statusClass = "status-paid";
+                }
+                else if (bill.Payment == "Chưa tính tiền" || bill.Payment == "Chưa thanh toán")
+                {
+                    statusClass = "status-unpaid";
+                }
+                else
+                {
+                    statusClass = "status-other";
+                }
+
+                <div class="col-md-6 col-lg-5">
+                    <div class="bill-card">
+                        <h3>
+                            Hóa đơn: @bill.BillID
+                            @if (!string.IsNullOrEmpty(displayStatus))
+                            {
+                                <span class="status-tag @statusClass">
+                                    @displayStatus
+                                </span>
+                            }
+                        </h3>
+                        <div class="info-line">Nhân viên: @bill.StaffName</div>
+                        <div class="info-line">
+                            Ngày tạo: @Html.Raw(bill.CreatedTimeFormatted)
+                        </div>
+
+                        <h4 class="mt-4">Chi tiết món ăn:</h4>
+                        @if (bill.AggregatedFoodItems != null && bill.AggregatedFoodItems.Any())
+                        {
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Món ăn</th>
+                                        <th class="text-center">SL</th>
+                                        <th class="text-right">Đơn giá</th>
+                                        <th class="text-right">Tổng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in bill.AggregatedFoodItems)
+                                    {
+                                        <tr>
+                                            <td>@item.FoodName</td>
+                                            <td class="text-center">@item.TotalQuantityFormatted</td>
+                                            <td class="text-right">@item.UnitPriceFormatted</td>
+                                            <td class="text-right">@item.TotalPriceFormatted</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p class="text-muted">Không có chi tiết món ăn.</p>
+                        }
+
+                        <table class="table table-sm mt-4">
+                            <tfoot>
+                                <tr class="total-row">
+                                    <td>Tổng cộng (@totalQuantityOfBill món)</td>
+                                    <td></td>
+                                    <td class="text-right">
+                                        @bill.TotalFormatted
+                                    </td>
+                                </tr>
+                                @if (!string.IsNullOrEmpty(bill.DiscountFormatted) && bill.DiscountFormatted != "0 đ")
+                                {
+                                    <tr class="total-row">
+                                        <td>Giảm giá:</td>
+                                        <td></td>
+                                        <td class="text-right">
+                                            @bill.DiscountFormatted
+                                        </td>
+                                    </tr>
+                                }
+                                <tr class="total-row">
+                                    <td>TỔNG (sau giảm giá):</td>
+                                    <td></td>
+                                    <td class="text-right">
+                                        @bill.TotalFinalFormatted
+                                    </td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>VAT (8%):</td>
+                                    <td></td>
+                                    <td class="text-right">
+                                        + @bill.VATAmountFormatted
+                                    </td>
+                                </tr>
+                                <tr class="final-total-row bg-light">
+                                    <td colspan="2"><strong>TỔNG CẦN THANH TOÁN:</strong></td>
+                                    <td class="text-right total-price-final">
+                                        <strong>@bill.TotalFinalWithVATFormatted</strong>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        @if (bill.Payment == "Chưa thanh toán" && bill.RelatedOrderIDs.Count >= 1)
+                        {
+                            <div class="btn-action-group">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#paymentModal" data-order-id="@bill.RelatedOrderIDs.First()">
+                                        Thanh toán
+                                    </button>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Login", "Account")" class="btn btn-warning">
+                                        Đăng nhập để thanh toán
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center text-muted py-5">
+                <h4>Không có hóa đơn nào để hiển thị.</h4>
+            </div>
+        }
+    </div>
+    <div class="row mb-3">
+        <div class="col-12 text-right">
+            <form method="get" class="form-inline justify-content-end">
+                <label class="mr-2">Hiển thị:</label>
+                <select name="pageSize" class="form-control mr-2" onchange="this.form.submit()">
+                    <option value="2" @(Model.PageSize == 2 ? "selected" : "")>2 hóa đơn</option>
+                    <option value="6" @(Model.PageSize == 6 ? "selected" : "")>6 hóa đơn</option>
+                    <option value="12" @(Model.PageSize == 12 ? "selected" : "")>12 hóa đơn</option>
+                    <option value="24" @(Model.PageSize == 24 ? "selected" : "")>24 hóa đơn</option>
+                </select>
+                <input type="hidden" name="page" value="1" />
+            </form>
+        </div>
+    </div>
+    <!-- Pagination Controls -->
+    @if (Model.TotalPages > 1)
+    {
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Bill", new { page = Model.CurrentPage - 1, pageSize = Model.PageSize })">
+                                <i class="fas fa-chevron-left"></i> Trước
+                            </a>
+                        </li>
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Bill", new { page = i, pageSize = Model.PageSize })">@i</a>
+                            </li>
+                        }
+
+                        <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Bill", new { page = Model.CurrentPage + 1, pageSize = Model.PageSize })">
+                                Sau <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="text-center text-muted">
+                    Trang @Model.CurrentPage / @Model.TotalPages - Hiển thị @Model.Bills.Count trên tổng @Model.TotalBills hóa đơn
+                </div>
+            </div>
+        </div>
+    }
+    <!-- Payment Method Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Chọn phương thức thanh toán</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="paymentForm">
+                        <input type="hidden" id="selectedOrderId" name="orderId" value="" />
+                        <input type="hidden" id="originalTotal" value="" />
+
+                        <div class="form-group">
+                            <label for="paymentMethod">Phương thức thanh toán:</label>
+                            <select class="form-control" id="paymentMethod" name="paymentMethod" required>
+                                <option value="">-- Chọn phương thức --</option>
+                                <option value="Tiền mặt">Tiền mặt</option>
+                                <option value="Chuyển khoản">Chuyển khoản</option>
+                                <option value="Thẻ tín dụng">Thẻ tín dụng</option>
+                                <option value="Ví điện tử">Ví điện tử</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="discountPercent">Giảm giá (%):</label>
+                            <input type="number" class="form-control" id="discountPercent" name="discountPercent"
+                                   min="0" max="100" step="0.1" value="0" placeholder="Nhập % giảm giá">
+                        </div>
+
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>Tổng tiền gốc:</strong>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <span id="displayOriginalTotal">0 đ</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>Giảm giá:</strong>
+                                    </div>
+                                    <div class="col-6 text-right text-danger">
+                                        - <span id="displayDiscountAmount">0 đ</span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong>Tổng cần thanh toán:</strong>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <strong class="text-success" id="displayFinalTotal">0 đ</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-success" id="confirmPaymentBtn">Tiếp theo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="successModalLabel">
+                        <i class="fas fa-check-circle"></i> Thành công
+                    </h5>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Tạo bill thành công!</h4>
+                    <p class="text-muted">Hóa đơn đã được tạo và thanh toán thành công.</p>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <p class="text-info">
+                            <i class="fas fa-user"></i> Được xử lý bởi: <strong>@ViewBag.CurrentUser</strong>
+                        </p>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
