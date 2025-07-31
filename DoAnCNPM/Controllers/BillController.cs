@@ -125,12 +125,17 @@ namespace QuanAn.Controllers
                     BillID = bill.BillID,
                     CreatedTimeFormatted = (bill.CreatedTime?.ToString("dddd, dd/MM/yyyy") ?? "N/A") + "<br />" + (bill.CreatedTime?.ToString("HH:mm") + " giờ" ?? "N/A"),
                     StaffName = bill.C_User_?.FullName ?? "N/A",
-                    Payment = bill.Payment ?? "Chưa thanh toán",
+
+                    // Update payment display logic
+                    Payment = GetPaymentDisplayStatus(bill, null),
+
                     TotalFormatted = totalBeforeDiscount.ToString("N0") + " đ",
                     DiscountFormatted = (discount > 0 ? "- " + discount.ToString("N0") : "0") + " đ",
                     TotalFinalFormatted = totalFinalAfterDiscount.ToString("N0") + " đ",
+
                     VATAmountFormatted = vatAmountCalculated.ToString("N0") + " đ",
                     TotalFinalWithVATFormatted = totalFinalWithVATCalculated.ToString("N0") + " đ",
+
                     RelatedOrderIDs = relatedOrderIds,
                     RelatedOrderIDsFormatted = relatedOrderIdsFormatted,
                     AggregatedFoodItems = currentBillAggregatedItems
@@ -157,6 +162,64 @@ namespace QuanAn.Controllers
             };
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult PayBill(string orderId, string paymentMethod = "Tiền mặt", decimal discountPercent = 0)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                TempData["ErrorMessage"] = "Bạn phải đăng nhập để thực hiện thanh toán.";
+                return RedirectToAction("Login", "Account");
+            }
+
+            string currentUserName = User.Identity.Name?.Trim();
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                TempData["ErrorMessage"] = "Lỗi: Không tìm thấy thông tin người dùng.";
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = db.C_User_.FirstOrDefault(u => u.UserName.Trim().ToLower() == currentUserName.ToLower());
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Tài khoản không tồn tại trong hệ thống.";
+                return RedirectToAction("Login", "Account");
+            }
+
+            string userId = user.UserID.Trim();
+            string userDisplayName = user.FullName ?? user.UserName;
+
+            var order = db.C_Order_.Include(o => o.C_Table_).FirstOrDefault(o => o.OrderID == orderId);
+            if (order == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy đơn hàng.";
+                return RedirectToAction("Bill");
+            }
+
+            if (order.Status != "Hoàn tất" && order.Status != "Đã tạo bill")
+            {
+                TempData["ErrorMessage"] = $"Chỉ thanh toán đơn 'Hoàn tất' hoặc 'Đã tạo bill'. Trạng thái hiện tại: {order.Status}";
+                return RedirectToAction("Bill");
+            }
+
+            if (order.Status == "Đã thanh toán")
+            {
+                TempData["ErrorMessage"] = $"Đơn hàng {orderId} đã được thanh toán.";
+                return RedirectToAction("Bill");
+            }
+
+            // Basic payment processing will be implemented in next version
+            TempData["SuccessMessage"] = $"Đang xử lý thanh toán cho đơn hàng {orderId}...";
+            return RedirectToAction("Bill");
+        }
+
+        // Update the GetPaymentDisplayStatus method to only use Payment field
+        private string GetPaymentDisplayStatus(C_Bill_ bill, string orderStatus)
+        {
+            // Since we're not using bill.Status anymore, just return the payment method
+            return bill.Payment ?? "Chưa thanh toán";
         }
 
         protected override void Dispose(bool disposing)
