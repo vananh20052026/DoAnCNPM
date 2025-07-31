@@ -55,6 +55,52 @@ namespace QuanAn.Controllers
             return View(pagedOrders);
         }
 
+        [HttpPost]
+        public ActionResult ChangeStatus(string orderId, string foodId, string status)
+        {
+            if (string.IsNullOrEmpty(orderId) || string.IsNullOrEmpty(foodId) || string.IsNullOrEmpty(status))
+            {
+                TempData["ErrorMessage"] = "Mã đơn hàng, Mã món ăn hoặc Trạng thái không được để trống.";
+                return RedirectToAction("OrderCardList");
+            }
 
+            var orderDetail = db.C_Order_Detail_
+                                .Include(od => od.C_Food_Info_)
+                                .FirstOrDefault(od => od.OrderID == orderId && od.FoodID == foodId);
+
+            if (orderDetail == null)
+            {
+                TempData["ErrorMessage"] = $"Không tìm thấy chi tiết món ăn với Đơn hàng {orderId} và Món ăn {foodId}.";
+                return RedirectToAction("OrderCardList");
+            }
+
+            orderDetail.Status = status;
+
+            var allDetails = db.C_Order_Detail_.Where(od => od.OrderID == orderId).ToList();
+
+            var order = db.C_Order_.FirstOrDefault(o => o.OrderID == orderId);
+
+            if (order != null)
+            {
+                if (allDetails.All(d => d.Status == "Hoàn tất"))
+                {
+                    order.Status = "Hoàn tất";
+                }
+                else if (allDetails.Any(d => d.Status == "Đang xử lý" || d.Status == "Hoàn tất"))
+                {
+                    order.Status = "Đang xử lý";
+                }
+                else
+                {
+                    order.Status = "Chưa làm";
+                }
+            }
+
+            db.SaveChanges();
+
+            TempData["SuccessMessage"] = $"Đã cập nhật trạng thái món '{orderDetail.C_Food_Info_.FoodName}' trong đơn hàng {orderId} thành '{status}'.";
+
+            return RedirectToAction("OrderCardList");
+        }
     }
 }
