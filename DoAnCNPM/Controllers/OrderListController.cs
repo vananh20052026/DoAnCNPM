@@ -286,5 +286,94 @@ namespace QuanAn.Controllers
             TempData["SuccessMessage"] = $"Đã thêm {quantity} món {foodToAdd.FoodName} vào đơn hàng {orderId} thành công.";
             return RedirectToAction("OrderList", new { statusFilter = Request["statusFilter"], tableFilter = Request["tableFilter"], dayFilter = Request["dayFilter"] });
         }
+
+        // GET: OrderList/CreateBill
+        [HttpGet]
+        public ActionResult CreateBill(string orderId)
+        {
+            if (string.IsNullOrEmpty(orderId))
+            {
+                TempData["ErrorMessage"] = "Không có mã đơn hàng được cung cấp để tạo hóa đơn.";
+                return RedirectToAction("OrderList");
+            }
+
+            var order = db.C_Order_
+                                .Include(o => o.C_Order_Detail_)
+                                .Include(o => o.C_Table_)
+                                .FirstOrDefault(o => o.OrderID == orderId);
+
+            if (order == null)
+            {
+                TempData["ErrorMessage"] = $"Không tìm thấy đơn hàng với mã {orderId}.";
+                return RedirectToAction("OrderList");
+            }
+
+            // Only allow billing for orders with 'Hoàn tất' status
+            if (order.Status != "Hoàn tất")
+            {
+                TempData["ErrorMessage"] = $"Chỉ có thể tạo hóa đơn cho đơn hàng có trạng thái **'Hoàn tất'**. Đơn hàng **{orderId}** hiện đang là **'{order.Status}'**.";
+                return RedirectToAction("OrderList");
+            }
+
+            // Check if bill already exists for this order
+            if (db.C_Bill_.Any(b => b.OrderID == orderId))
+            {
+                TempData["ErrorMessage"] = $"Hóa đơn đã tồn tại cho đơn hàng **{orderId}**.";
+                return RedirectToAction("OrderList");
+            }
+
+            string newBillID = orderId;
+
+            if (db.C_Bill_.Any(b => b.BillID == newBillID))
+            {
+                TempData["ErrorMessage"] = $"Mã hóa đơn **{newBillID}** đã tồn tại. Không thể tạo hóa đơn trùng lặp cho đơn hàng này.";
+                return RedirectToAction("OrderList");
+            }
+
+            var newBill = new C_Bill_
+            {
+                BillID = newBillID,
+                Total = order.Total,
+                Discount = order.Discount,
+                TotalFinal = (order.Total ?? 0) - (order.Discount ?? 0),
+                Payment = "Chưa thanh toán",
+                CreatedTime = DateTime.Now,
+                OrderID = order.OrderID,
+                UserID = Session["UserID"] as string
+            };
+            db.C_Bill_.Add(newBill);
+
+            int totalQuantityInOrder = 0;
+            decimal totalAmountInOrder = 0;
+
+            foreach (var detail in order.C_Order_Detail_)
+            {
+                totalQuantityInOrder += (int)detail.Quantity;
+                totalAmountInOrder += (detail.Quantity ?? 0) * (detail.UnitPrice ?? 0);
+            }
+
+            var billDetail = new C_Bill_Detail_
+            {
+                BillID = newBillID,
+                OrderID = order.OrderID,
+                Quantity = totalQuantityInOrder,
+                UnitPrice = totalAmountInOrder
+            };
+            db.C_Bill_Detail_.Add(billDetail);
+
+            // Update order status to "Đã tạo bill"
+            order.Status = "Đã tạo bill";
+
+            // Optionally, set table status to available if needed
+            if (order.C_Table_ != null)
+            {
+                order.C_Table_.Status = "Trống";
+            }
+
+            db.SaveChanges();
+
+            TempData["SuccessMessage"] = $"Đã tạo hóa đơn {newBillID} thành công cho đơn hàng {orderId}. Trạng thái đơn hàng đã được cập nhật thành 'Đã tạo bill'.";
+            return RedirectToAction("OrderList");
+        }
     }
 }
