@@ -1,0 +1,160 @@
+﻿@model List<QuanAn.Models.ViewModel.OrderItemVM>
+
+@{
+    ViewBag.Title = "Danh sách Chi tiết Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+<style>
+
+    table {
+        font-size: 1.1rem;
+        width: 100%;
+    }
+
+    .table td, .table th {
+        padding: 16px 20px;
+        vertical-align: middle;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .badge {
+        font-size: 1rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    select.form-control.d-inline {
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .main-content {
+            background: url('@Url.Content("~/Content/img/fullban.jpg")') no-repeat center center fixed;
+        background-size: cover;
+        background-attachment: fixed;
+        padding: 30px;
+    }
+
+    .container {
+        background-color: rgba(255, 255, 255, 0.9);
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">📊 Danh sách Chi tiết Order</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <form method="get" action="@Url.Action("OrderCardList", "OrderCardList")" class="form-inline mb-3">
+        <input type="hidden" name="page" value="1" />
+        <label class="mr-2">📋 Lọc theo trạng thái:</label>
+        <select name="statusFilter" class="form-control mr-3" onchange="this.form.submit()">
+            <option value="">Tất cả</option>
+            <option value="Hoàn tất" @(ViewBag.StatusFilter == "Hoàn tất" ? "selected" : "")>✔ Hoàn tất</option>
+            <option value="Đang xử lý" @(ViewBag.StatusFilter == "Đang xử lý" ? "selected" : "")>⏳ Đang xử lý</option>
+            <option value="Chưa làm" @(ViewBag.StatusFilter == "Chưa làm" ? "selected" : "")>📝 Chưa làm</option>
+        </select>
+    </form>
+
+
+    @if (!string.IsNullOrEmpty(Request["statusFilter"]))
+    {
+        <p class="text-muted ml-1">
+            🔍 Đang lọc theo:
+            <strong>Trạng thái:</strong> @Request["statusFilter"]
+        </p>
+    }
+
+    <table class="table table-bordered table-hover shadow-sm rounded bg-white">
+        <thead class="thead-dark">
+            <tr>
+                <th>Mã Đơn</th>
+                <th>Tên Món Ăn</th>
+                <th>Số Lượng</th>
+                <th>Trạng Thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.OrderID</td>
+                        <td>@item.FoodName</td>
+                        <td>@item.Quantity</td>
+                        <td>
+                            <form method="post" action="@Url.Action("ChangeStatus", "OrderCardList")" style="display:inline;">
+                                <input type="hidden" name="orderId" value="@item.OrderID" />
+                                <input type="hidden" name="foodId" value="@item.FoodID" />
+                                <select name="status" class="form-control d-inline" style="width:auto;">
+                                    <option value="Chưa làm" @(item.Status == "Chưa làm" ? "selected" : "")>📋 Chưa làm</option>
+                                    <option value="Đang xử lý" @(item.Status == "Đang xử lý" ? "selected" : "")>⌛ Đang xử lý</option>
+                                    <option value="Hoàn tất" @(item.Status == "Hoàn tất" ? "selected" : "")>✔ Hoàn tất</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary ml-2">Lưu</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="4" class="text-center">Không có dữ liệu</td></tr>
+            }
+        </tbody>
+    </table>
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("OrderCardList", new {
+                        page = i,
+                        statusFilter = ViewBag.StatusFilter
+                    })">@i</a>
+                </li>
+            }
+            </ul>
+        </nav>
+    }
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+}
